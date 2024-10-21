@@ -2,11 +2,11 @@
 // para que react la reconozca como un componente
 
 import React, { useState } from 'react';
-import './formulario.css'; // Importa los estilos personalizados
+import './LoginKinesiologo.css'; // Importa los estilos personalizados
 
 // Formulario antes de bootstrap
-const Formulario = () => {
-  const [mail, setMail] = useState('');
+const LoginKinesiolgo = () => {
+  const [matricula, setMatricula] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -14,18 +14,25 @@ const Formulario = () => {
     event.preventDefault();
 
     // Validación de los inputs
-    if (!mail || !password) {
+    if (!matricula && !password) {
       setError('Todos los campos son obligatorios');
       return;
+    }    
+    if (!matricula) {
+      setError('Debe ingresar su matricula');
+      return;
     }
-
-    if (!/\S+@\S+\.\S+/.test(mail)) {
-      setError('El correo electrónico no es válido');
+    if (!/^\d+$/.test(matricula)) {
+      setError('La matrícula solo debe contener valores numéricos');
+      return;
+    }
+    else if (!password){
+      setError('La contraseña es obligatoria');
       return;
     }
 
     // La lógica de la autenticación se puede hacer acá, pero nosotros la hacemos en el backend
-    console.log('Mail:', mail);
+    console.log('Matricula:', matricula);
     console.log('Password:', password);
 
     // Limpiar el error si la validación pasa
@@ -37,18 +44,18 @@ const Formulario = () => {
         <h1> Iniciar sesión </h1>
         <form onSubmit={handleLogin}>
            {error && <p style={{ color: 'red' }}>{error}</p>}
-          <div className='DivMail'>
-            <label htmlFor="mail">Mail:</label>
+          <div className='DivMatricula'>
+            <label htmlFor="matricula">Ingrese su matricula:</label>
             <input
-              type="email"
-              id="mail"
-              value={mail}
+              type="text"
+              id="matricula"
+              value={matricula}
 // El evento onChange ayuda a almacenar el valor del input en el estado
-              onChange={(e) => setMail(e.target.value)}
+              onChange={(e) => setMatricula(e.target.value)}
             />
           </div>
           <div className='DivPassword'>
-            <label htmlFor="password">Password:</label>
+            <label htmlFor="password">Ingrese su contraseña:</label>
             <input
               type="password"
               id="password"
@@ -63,4 +70,5 @@ const Formulario = () => {
   );
 };
 
-export default Formulario;
+export default LoginKinesiolgo;
+

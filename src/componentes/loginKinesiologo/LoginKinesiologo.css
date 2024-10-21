@@ -1,25 +1,28 @@
-/*Estilos generales para el contenedor del formulario*/ 
+
 section {
   display: flex;
-  height: 100vh;
-  width: 100%;
   justify-content: center;
   align-items: center;
+  height: 100vh;
   background-color: #f0f0f0;
 }
 
-/* Estilos generales para el formulario */
-
-form {
-  max-width: 400px;
-  width: 100%;
+.container {
+  text-align: center;
+  background-color: #fff;
   padding: 2rem;
-  border: 1px solid #ccc;
   border-radius: 8px;
-  background-color: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+h1 {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+form div {
+  margin-bottom: 1rem;
+}
 
 label {
   display: block;
@@ -37,7 +40,6 @@ input[type="password"] {
   box-sizing: border-box;
 }
 
-/* Estilos para el botón de envío */
 button[type="submit"] {
   width: 100%;
   padding: 0.75rem;
@@ -47,30 +49,15 @@ button[type="submit"] {
   color: white;
   font-size: 1rem;
   cursor: pointer;
+  margin-top: 2px;
 }
 
 button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-/* Estilos para el título del formulario */
-h1 {
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-/* Estilos para el mensaje de error */
 .error-message {
   color: red;
   margin-bottom: 1rem;
   text-align: center;
-}
-#root{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  background-color: #f0f0f0;
 }
