@@ -20,9 +20,9 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Inicio from './componentes/Inicio.tsx';
-import LoginKinesiolgo from './componentes/loginKinesiologo/LoginKinesiologo.tsx';
-import LoginPaciente from './componentes/loginPaciente/loginPaciente';
-import LoginSecretaria from './componentes/loginSecretaria/loginSecretaria';
+import LoginKinesiolgo from './componentes/login/loginKinesiologo.tsx';
+import LoginPaciente from './componentes/login/loginPaciente.tsx';
+import LoginSecretaria from './componentes/login/loginSecretaria.tsx';
 
 const App = () => {
   return (

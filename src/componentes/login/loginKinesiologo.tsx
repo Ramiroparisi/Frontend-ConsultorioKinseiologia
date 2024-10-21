@@ -2,7 +2,7 @@
 // para que react la reconozca como un componente
 
 import React, { useState } from 'react';
-import './LoginKinesiologo.css'; // Importa los estilos personalizados
+import 'C:/Users/Usuario/Frontend-ConsultorioKinseiologia/src/componentes/estilos/login.css';
 
 // Formulario antes de bootstrap
 const LoginKinesiolgo = () => {

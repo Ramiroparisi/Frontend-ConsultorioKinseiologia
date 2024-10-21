@@ -2,10 +2,10 @@
 // para que react la reconozca como un componente
 
 import React, { useState } from 'react';
-import './loginSecretaria.css'; // Importa los estilos personalizados
+import 'C:/Users/Usuario/Frontend-ConsultorioKinseiologia/src/componentes/estilos/login.css'
 
-
-const LoginSecretaria = () => {
+// Formulario antes de bootstrap
+const LoginPaciente = () => {
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,12 +17,12 @@ const LoginSecretaria = () => {
     if (!mail || !password) {
       setError('Todos los campos son obligatorios');
       return;
-    }
+    }    
     if (!mail) {
       setError('Debe ingresar su email');
       return;
     }
-     else if (!password) {
+    else if (!password) {
       setError('Debe ingresar su contraseña');
       return;
     }
@@ -39,7 +39,6 @@ const LoginSecretaria = () => {
     setError('');
   };
   return (
-/* <section> agrupa el contenido que está relacionado temáticamente.*/
     <section>
       <div className='DivGeneral'>
         <h1> Iniciar sesión </h1>
@@ -71,4 +70,4 @@ const LoginSecretaria = () => {
   );
 };
 
-export default LoginSecretaria;
+export default LoginPaciente;
