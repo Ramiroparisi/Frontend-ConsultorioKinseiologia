@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Inicio.css'; // Importa los estilos personalizados
+import 'C:/Users/Usuario/Frontend-ConsultorioKinseiologia/src/estilos/homePage.css' // Importa los estilos personalizados
 
-const Inicio = () => {
+const HomePages = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (path: string) => {
@@ -24,4 +24,4 @@ const Inicio = () => {
   );
 };
 
-export default Inicio;
+export default HomePages;

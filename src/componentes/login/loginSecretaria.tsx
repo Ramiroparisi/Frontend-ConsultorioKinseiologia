@@ -1,24 +1,26 @@
-// importante que la función Formulario empiece con mayúscula,
-// para que react la reconozca como un componente
-
 import React, { useState } from 'react';
-import 'C:/Users/Usuario/Frontend-ConsultorioKinseiologia/src/componentes/estilos/login.css'
-
+import { Form, Button, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
 
 const LoginSecretaria = () => {
-  const [mail, setMail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const navigate = useNavigate(); // Hook para redirigir
 
-  const handleLogin = (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
     // Validación de los inputs
-    if (!mail || !password) {
+    if (!email || !password) {
       setError('Todos los campos son obligatorios');
       return;
     }
-    if (!mail) {
+    if (!email) {
       setError('Debe ingresar su email');
       return;
     }
@@ -26,46 +28,76 @@ const LoginSecretaria = () => {
       setError('Debe ingresar su contraseña');
       return;
     }
-    if (!/\S+@\S+\.\S+/.test(mail)) {
+    if (!/\S+@\S+\.\S+/.test(email)) {
       setError('El correo electrónico no es válido');
       return;
     }
+    setError(''); // Limpiar errores previos
+    setLoading(true);
 
-    // La lógica de la autenticación se puede hacer acá, pero nosotros la hacemos en el backend
-    console.log('Mail:', mail);
-    console.log('Password:', password);
+    try {
+      // Llamada al backend para autenticar (con el puerto 3000)
+      const response = await fetch('http://localhost:3000/secretarias/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',  // Incluir cookies en la solicitud
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Limpiar el error si la validación pasa
-    setError('');
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'Error en la autenticación');
+        setLoading(false);
+        return;
+      }
+
+      // Guardar el token JWT en cookies
+      Cookies.set('token', data.token, { expires: 1 }); // Guardar el token por 1 día
+
+      // Redirigir al dashboard del secretaria
+      navigate('/secretariaDashboard');
+    } catch (error) {
+      console.error('Error en el login:', error);
+      setError('Error en la conexión. Inténtalo más tarde.');
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
-/* <section> agrupa el contenido que está relacionado temáticamente.*/
-    <section>
-      <div className='DivGeneral'>
-        <h1> Iniciar sesión </h1>
-        <form onSubmit={handleLogin}>
-           {error && <p style={{ color: 'red' }}>{error}</p>}
-          <div className='DivMail'>
-            <label htmlFor="mail">Ingrese su Email:</label>
-            <input
-              type="email"
-              id="mail"
-              value={mail}
-// El evento onChange ayuda a almacenar el valor del input en el estado
-              onChange={(e) => setMail(e.target.value)}
+    <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="col-md-4">
+        <h1 className="text-center mb-4">Iniciar sesión</h1>
+        <Form onSubmit={handleLogin}>
+          {error && <Alert variant="danger">{error}</Alert>}
+
+          <Form.Group controlId="email">
+            <Form.Label>Ingrese su email</Form.Label>
+            <Form.Control
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email"
             />
-          </div>
-          <div className='DivPassword'>
-            <label htmlFor="password">Ingrese su contraseña:</label>
-            <input
+          </Form.Group>
+
+          <Form.Group controlId="password" className="mt-3">
+            <Form.Label>Ingrese su contraseña</Form.Label>
+            <Form.Control
               type="password"
-              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
             />
-          </div>
-          <button type="submit">Ingresar</button>
-        </form>
+          </Form.Group>
+
+          <Button type="submit" className="mt-4 w-100" variant="primary" disabled={loading}>
+            {loading ? 'Ingresando...' : 'Ingresar'}
+          </Button>
+        </Form>
       </div>
     </section>
   );
