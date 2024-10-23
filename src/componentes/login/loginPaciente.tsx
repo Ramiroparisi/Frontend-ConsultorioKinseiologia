@@ -12,6 +12,7 @@ const LoginPaciente = () => {
   
   const navigate = useNavigate(); // Hook para redirigir
 
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -67,8 +68,11 @@ const LoginPaciente = () => {
     }
   };
 
+
+
   return (
     <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      
       <div className="col-md-4">
         <h1 className="text-center mb-4">Iniciar sesión</h1>
         <Form onSubmit={handleLogin}>
@@ -94,7 +98,7 @@ const LoginPaciente = () => {
             />
           </Form.Group>
 
-          <Button type="submit" className="mt-4 w-100" variant="primary" disabled={loading}>
+          <Button type="submit" className="button" disabled={loading}>
             {loading ? 'Ingresando...' : 'Ingresar'}
           </Button>
         </Form>

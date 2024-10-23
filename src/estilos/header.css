@@ -1,0 +1,53 @@
+/* Estilo del contenedor del header */
+.navbar {
+    background-color: #606C38; /* Color de fondo */
+    color: white; /* Color del texto */
+    position: fixed; /* Hace que el header sea fijo */
+    top: 0; /* Fija en la parte superior */
+    width: 100%; /* El header ocupa todo el ancho de la página */
+    padding: 10px 20px; /* Espaciado interno */
+    z-index: 1000; /* Asegura que el header esté encima de otros elementos */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para el efecto de flotación */
+  }
+  
+  /* Estilo del contenedor interno */
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+  }
+  
+  /* Título del navbar */
+  .navbar-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  /* Estilos de los links */
+  .navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+  }
+  
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .navbar-links a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Ajuste de márgenes para el contenido principal debajo del header */
+  body, .content {
+    margin-top: 60px; /* Ajusta el margen superior para que no se superponga con el header */
+  }

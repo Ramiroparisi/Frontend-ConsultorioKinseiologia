@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '../../estilos/login.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
 
@@ -59,11 +59,13 @@ const LoginKinesiologo = () => {
       setLoading(false);
     }
   };
-
+  
   return (
-    <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="col-md-4">
-        <h1 className="text-center mb-4">Iniciar sesión</h1>
+    <section>
+      
+      <div>
+        <h1>Iniciar sesión</h1>
+        
         <Form onSubmit={handleLogin}>
           {error && <Alert variant="danger">{error}</Alert>}
 
@@ -87,9 +89,11 @@ const LoginKinesiologo = () => {
             />
           </Form.Group>
 
-          <Button type="submit" className="mt-4 w-100" variant="primary" disabled={loading}>
+    
+          <Button type="submit" className="button" disabled = {loading}>
             {loading ? 'Ingresando...' : 'Ingresar'}
           </Button>
+
         </Form>
       </div>
     </section>

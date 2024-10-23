@@ -1,6 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'C:/Users/Usuario/Frontend-ConsultorioKinseiologia/src/estilos/homePage.css' // Importa los estilos personalizados
+import './estilos/homePage.css' // Importa los estilos personalizados
 
 const HomePages = () => {
   const navigate = useNavigate();
@@ -11,14 +10,17 @@ const HomePages = () => {
 
   return (
     <section>
+
       <div className="container">
-        <h1>Bienvenido/a</h1>
+        <h1>Bienvenido</h1>
         <p>Seleccione el tipo de usuario con el que desea iniciar sesión</p>
-        <div className="button-group">
-          <button onClick={() => handleNavigation('/loginKinesiologo')}>Kinesiologo</button>
-          <button onClick={() => handleNavigation('/loginPaciente')}>Paciente</button>
-          <button onClick={() => handleNavigation('/loginSecretaria')}>Secretaria</button>
+        
+        <div>
+          <button className="button" onClick={() => handleNavigation('/loginKinesiologo')}>Kinesiologo</button>
+          <button className="button" onClick={() => handleNavigation('/loginPaciente')}>Paciente</button>
+          <button className="button" onClick={() => handleNavigation('/loginSecretaria')}>Secretaria</button>
         </div>
+
       </div>
     </section>
   );
