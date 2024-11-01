@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
@@ -82,7 +82,7 @@ const LoginSecretaria = () => {
               type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="email"
+              placeholder="name@example.com"
             />
           </Form.Group>
 
@@ -96,8 +96,20 @@ const LoginSecretaria = () => {
             />
           </Form.Group>
 
-          <Button type="submit" className="button" disabled={loading}>
-            {loading ? 'Ingresando...' : 'Ingresar'}
+          <Button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Ingresando...
+              </>
+            ) : ('Ingresar')}
           </Button>
         </Form>
       </div>

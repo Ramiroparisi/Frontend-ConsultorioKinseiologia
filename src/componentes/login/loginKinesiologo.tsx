@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import '../../estilos/login.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
@@ -63,7 +63,7 @@ const LoginKinesiologo = () => {
   return (
     <section>
       
-      <div>
+      <div className="mb-3">
         <h1>Iniciar sesión</h1>
         
         <Form onSubmit={handleLogin}>
@@ -90,8 +90,20 @@ const LoginKinesiologo = () => {
           </Form.Group>
 
     
-          <Button type="submit" className="button" disabled = {loading}>
-            {loading ? 'Ingresando...' : 'Ingresar'}
+          <Button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Ingresando...
+              </>
+            ) : ('Ingresar')}
           </Button>
 
         </Form>
