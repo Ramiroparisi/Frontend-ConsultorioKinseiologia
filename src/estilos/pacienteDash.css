@@ -1,0 +1,94 @@
+.dashboard {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+            
+.dashboard-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0;
+}
+  
+.btn-exit {
+    background: none;
+    border: none;
+    color: rgb(255, 0, 0);
+    padding: 0;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.text-color { color: #000000; }
+
+
+.appointment-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.appointment-row:last-child {
+    border-bottom: none;
+}
+
+.appointment-icon {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.appointment-actions button {
+    padding: 0.25rem;
+    color: #6b7280;
+    text-decoration: none;
+}
+
+.btn-dark {
+    background-color: #111827;
+    border-color: #111827;
+    padding: 0.5rem 1rem;
+}
+
+.btn-dark:hover {
+    background-color: #1f2937;
+    border-color: #1f2937;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.person-icon .bi-person {
+    width: 20px; /* Ajusta el tamaño si es necesario */
+    height: 20px;
+    fill: rgb(0, 0, 255); /* Cambia el color*/
+}
+
+.pending-icon .bi-clock-history {
+    width: 19px; /* Ajusta el tamaño si es necesario */
+    height: 19px;
+    fill: rgb(0, 0, 255); /* Cambia el color */
+}
+
+.appointment-icon .bi-calendar {
+    width: 16px; /* Ajusta el tamaño si es necesario */
+    height: 16px;
+    fill: rgb(128, 128, 128); /* Cambia el color */
+}
+
+.green-icon .bi-check-lg {
+    width: 19px; /* Ajusta el tamaño si es necesario */
+    height: 19px;
+    fill: rgb(0, 128, 0); /* Cambia el color */
+}
