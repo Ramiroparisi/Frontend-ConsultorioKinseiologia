@@ -38,7 +38,7 @@ const LoginSecretaria = () => {
 
     try {
       // Llamada al backend para autenticar (con el puerto 3000)
-      const response = await fetch('http://localhost:3000/secretarias/login', {
+      const response = await fetch('/api/secretarias/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

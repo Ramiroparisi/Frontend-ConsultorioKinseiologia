@@ -30,7 +30,7 @@ const LoginKinesiologo = () => {
 
     try {
       // Llamada al backend para autenticar (con el puerto 3000)
-      const response = await fetch('http://localhost:3000/kinesiologos/login', {
+      const response = await fetch('/api/kinesiologos/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
