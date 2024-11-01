@@ -16,8 +16,16 @@ const LoginKinesiologo = () => {
     event.preventDefault();
 
     // Validación de los inputs
-    if (!matricula || !password) {
+    if (!matricula && !password) {
       setError('Todos los campos son obligatorios');
+      return;
+    }
+    if (!matricula) {
+      setError('Debe ingresar su matricula');
+      return;
+    }
+     else if (!password) {
+      setError('Debe ingresar su contraseña');
       return;
     }
     if (!/^\d+$/.test(matricula)) {
@@ -61,10 +69,10 @@ const LoginKinesiologo = () => {
   };
   
   return (
-    <section>
+    <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
       
-      <div className="mb-3">
-        <h1>Iniciar sesión</h1>
+      <div className="col-md-2">
+        <h1 className="text-center mb-4">Iniciar sesión</h1>
         
         <Form onSubmit={handleLogin}>
           {error && <Alert variant="danger">{error}</Alert>}
