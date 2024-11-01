@@ -1,0 +1,42 @@
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.card {
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.card li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.card li:last-child {
+  border-bottom: none;
+}
+
+.card p {
+  text-align: center;
+  color: #888;
+}
