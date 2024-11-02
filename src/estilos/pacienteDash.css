@@ -1,28 +1,25 @@
 .dashboard {
-    background-color: #f8f9fa;
-    min-height: 100vh;
-}
-            
-.dashboard-title {
-    font-size: 1.3rem;
-    font-weight: 500;
-    margin: 0;
-}
-  
-.btn-exit {
-    background: none; /* Sin fondo */
-    border: none; /* Sin borde */
-    color: rgb(255, 0, 0); /* Color rojo */
-    padding: 0; /* Sin padding */
-    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
-    display: flex; /* Usar flexbox para alinear el ícono y el texto */
-    align-items: center; /* Alinear verticalmente el ícono y el texto */
+    background-color: #f0f2f5; /* Color de fondo del dashboard */
+    min-height: 100vh; /* Asegura que el dashboard ocupe al menos toda la altura de la ventana */
+    padding: 20px; /* Espaciado interno */
 }
 
-.btn-exit i {
-    margin-right: 5px; /* Espacio entre el ícono y el texto */
-    font-size: 1.2em; /* Tamaño del ícono (ajusta según tu preferencia) */
+.container {
+    background-color: #ffffff; /* Fondo blanco para el contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra */
+    padding: 20px 20px; /* Espaciado interno para mayor separación */
+    margin-top: -140px; /* Ajusta el margen superior si es necesario */
 }
+
+.dashboard-title {
+    font-size: 1.5rem; /* Tamaño del texto */
+    font-weight: 700; /* Grosor de la fuente */
+    color: #333; /* Color del texto */
+    margin-top: 5px; /* Aumenta el margen superior para dar más espacio */
+    margin-bottom: 10px; /* Reduce el margen inferior */
+}
+
 
 .dashboard-card {
     background: white;

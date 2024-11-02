@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import 'C:/Users/Usuario/Frontend-ConsultorioKinseiologia/src/estilos/kinesiologoDash.css';
+import '../estilos/kinesiologoDash.css';
 
 interface Turno {
   id: number;
