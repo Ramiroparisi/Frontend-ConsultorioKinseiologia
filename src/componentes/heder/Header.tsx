@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top px-4">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
       <a className="navbar-brand" href="#">
         <span className="brand">Mi consultorio</span>
       </a>

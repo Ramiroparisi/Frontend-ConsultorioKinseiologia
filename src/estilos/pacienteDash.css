@@ -4,16 +4,24 @@
 }
             
 .dashboard-title {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 500;
     margin: 0;
 }
   
 .btn-exit {
-    background: none;
-    border: none;
-    color: rgb(255, 0, 0);
-    padding: 0;
+    background: none; /* Sin fondo */
+    border: none; /* Sin borde */
+    color: rgb(255, 0, 0); /* Color rojo */
+    padding: 0; /* Sin padding */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+    display: flex; /* Usar flexbox para alinear el ícono y el texto */
+    align-items: center; /* Alinear verticalmente el ícono y el texto */
+}
+
+.btn-exit i {
+    margin-right: 5px; /* Espacio entre el ícono y el texto */
+    font-size: 1.2em; /* Tamaño del ícono (ajusta según tu preferencia) */
 }
 
 .dashboard-card {
@@ -36,7 +44,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #ebe7e5;
 }
 
 .appointment-row:last-child {
@@ -48,15 +56,32 @@
     font-size: 0.875rem;
 }
 
-.appointment-actions button {
-    padding: 0.25rem;
-    color: #6b7280;
-    text-decoration: none;
+.appointment-actions {
+    display: flex; /* Asegura que los botones estén en línea */
+    gap: 10px; /* Espacio entre los botones */
+}
+
+.appointment-actions .btn {
+    transition: background-color 0.3s, color 0.3s; /* Suaviza las transiciones */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 8px; /* Espaciado interno */
+}
+
+.appointment-actions .btn:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Color de fondo al pasar el mouse */
+}
+
+.appointment-actions .btn.text-primary:hover {
+    background-color: rgba(0, 123, 255, 0.2); /* Color de fondo al pasar el mouse para el botón de editar */
+}
+
+.appointment-actions .btn.text-danger:hover {
+    background-color: rgba(255, 0, 0, 0.2); /* Color de fondo al pasar el mouse para el botón de eliminar */
 }
 
 .btn-dark {
     background-color: #111827;
-    border-color: #111827;
+    border-color: #ffffff;
     padding: 0.5rem 1rem;
 }
 
@@ -69,26 +94,35 @@
     gap: 0.5rem;
 }
 
-.person-icon .bi-person {
-    width: 20px; /* Ajusta el tamaño si es necesario */
-    height: 20px;
-    fill: rgb(0, 0, 255); /* Cambia el color*/
+.pending-icon {
+    color: #0000FF; /* Color del icono */
+    font-size: 22px; /* Tamaño del icono */
 }
 
-.pending-icon .bi-clock-history {
-    width: 19px; /* Ajusta el tamaño si es necesario */
-    height: 19px;
-    fill: rgb(0, 0, 255); /* Cambia el color */
+.appointment-icon {
+    color: #808080; /* Cambia el color del icono */
+    font-size: 16px; /* Ajusta el tamaño del icono */
+    margin-right: 0.5rem; /* Espaciado a la derecha del icono */
 }
 
-.appointment-icon .bi-calendar {
-    width: 16px; /* Ajusta el tamaño si es necesario */
-    height: 16px;
-    fill: rgb(128, 128, 128); /* Cambia el color */
+
+.check-icon {
+    color: #28a745; /* Color del icono (verde para el check) */
+    font-size: 24px; /* Tamaño del icono */
+    margin-right: -0.2rem; /* Espaciado a la derecha del icono */
 }
 
-.green-icon .bi-check-lg {
-    width: 19px; /* Ajusta el tamaño si es necesario */
-    height: 19px;
-    fill: rgb(0, 128, 0); /* Cambia el color */
+.section-title {
+    font-size: 1.05rem; /* Tamaño de la fuente del título */
+    font-weight: 600; /* Grosor de la fuente */
+    color: #333; /* Color del texto */
+}
+
+.dashboard-card {
+    background-color: #ffffff; /* Color de fondo */
+    border: 1px solid #ddd; /* Borde */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
+    margin-bottom: 20px; /* Espaciado inferior */
 }
