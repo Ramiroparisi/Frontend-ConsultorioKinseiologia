@@ -1,42 +1,164 @@
 .dashboard {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  padding: 20px;
+  padding-top: 170px;
+  /* Ajusta este valor según sea necesario */
 }
 
-.card {
-  max-width: 400px;
-  width: 100%;
-  padding: 2rem;
-  border: 1px solid #ccc;
+.container {
+  background-color: #ffffff;
+  /* Fondo blanco para el contenedor */
   border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  /* Sombra */
+  padding: 20px 20px;
+  /* Espaciado interno para mayor separación */
+  margin-top: -140px;
+  /* Ajusta el margen superior si es necesario */
 }
 
-.card h2 {
-  margin-bottom: 1rem;
+.dashboard-title {
   font-size: 1.5rem;
-  text-align: center;
+  /* Tamaño del texto */
+  font-weight: 700;
+  /* Grosor de la fuente */
+  color: #333;
+  /* Color del texto */
+  margin-top: 5px;
+  /* Aumenta el margen superior para dar más espacio */
+  margin-bottom: 10px;
+  /* Reduce el margen inferior */
 }
 
-.card ul {
-  list-style-type: none;
-  padding: 0;
+
+.dashboard-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.card li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #ccc;
+.section-title {
+  font-size: 1rem;
+  font-weight: 500;
 }
 
-.card li:last-child {
+.text-color {
+  color: #000000;
+}
+
+
+.appointment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #ebe7e5;
+}
+
+.appointment-row:last-child {
   border-bottom: none;
 }
 
-.card p {
-  text-align: center;
-  color: #888;
+.appointment-icon {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.appointment-actions {
+  display: flex;
+  /* Asegura que los botones estén en línea */
+  gap: 10px;
+  /* Espacio entre los botones */
+}
+
+.appointment-actions .btn {
+  transition: background-color 0.3s, color 0.3s;
+  /* Suaviza las transiciones */
+  border-radius: 5px;
+  /* Bordes redondeados */
+  padding: 8px;
+  /* Espaciado interno */
+}
+
+.appointment-actions .btn:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  /* Color de fondo al pasar el mouse */
+}
+
+.appointment-actions .btn.text-primary:hover {
+  background-color: rgba(0, 123, 255, 0.2);
+  /* Color de fondo al pasar el mouse para el botón de editar */
+}
+
+.appointment-actions .btn.text-danger:hover {
+  background-color: rgba(255, 0, 0, 0.2);
+  /* Color de fondo al pasar el mouse para el botón de eliminar */
+}
+
+.btn-dark {
+  background-color: #111827;
+  border-color: #ffffff;
+  padding: 0.5rem 1rem;
+}
+
+.btn-dark:hover {
+  background-color: #1f2937;
+  border-color: #1f2937;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.pending-icon {
+  color: #0000FF;
+  /* Color del icono */
+  font-size: 22px;
+  /* Tamaño del icono */
+}
+
+.appointment-icon {
+  color: #808080;
+  /* Cambia el color del icono */
+  font-size: 16px;
+  /* Ajusta el tamaño del icono */
+  margin-right: 0.5rem;
+  /* Espaciado a la derecha del icono */
+}
+
+
+.check-icon {
+  color: #28a745;
+  /* Color del icono (verde para el check) */
+  font-size: 24px;
+  /* Tamaño del icono */
+  margin-right: -0.2rem;
+  /* Espaciado a la derecha del icono */
+}
+
+.section-title {
+  font-size: 1.05rem;
+  /* Tamaño de la fuente del título */
+  font-weight: 600;
+  /* Grosor de la fuente */
+  color: #333;
+  /* Color del texto */
+}
+
+.dashboard-card {
+  background-color: #ffffff;
+  /* Color de fondo */
+  border: 1px solid #ddd;
+  /* Borde */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  padding: 20px;
+  /* Espaciado interno */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Sombra */
+  margin-bottom: 20px;
+  /* Espaciado inferior */
 }

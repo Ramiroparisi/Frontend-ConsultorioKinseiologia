@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './componentes/heder/Header.tsx';
+import Header from './componentes/header/Header.tsx';
 import HomePages from './homePage.tsx';
 import LoginKinesiolgo from './componentes/login/loginKinesiologo.tsx';
 import LoginPaciente from './componentes/login/loginPaciente.tsx';
@@ -10,6 +10,8 @@ import LoginSecretaria from './componentes/login/loginSecretaria.tsx';
 import DashboardPaciente from './dashboards/pacienteDashboard.tsx';
 import KinesiologoDashboard from './dashboards/kinesiologoDashboard.tsx';
 import SignUpPaciente from './componentes/login/signupPaciente.tsx';
+import SobreNosotros from './componentes/header/sobreNosotros.tsx';
+import Contacto from './componentes/header/contacto.tsx';
 
 
 const App = () => {
@@ -26,7 +28,11 @@ const App = () => {
          {/* Rutas para los dashboards */}
     
         <Route path="/pacienteDashboard" element={<DashboardPaciente />} />
-        <Route path="/kinesiologoDashboard" element={<KinesiologoDashboard />} />        
+        <Route path="/kinesiologoDashboard" element={<KinesiologoDashboard />} />
+        
+        {/* Rutas para el header*/}
+        <Route path="/sobreNosotros" element={<SobreNosotros />} />
+        <Route path="/contacto" element={<Contacto />} />    
         
       </Routes>
     </Router>

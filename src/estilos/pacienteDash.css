@@ -1,7 +1,9 @@
 .dashboard {
-    background-color: #f0f2f5; /* Color de fondo del dashboard */
-    min-height: 100vh; /* Asegura que el dashboard ocupe al menos toda la altura de la ventana */
-    padding: 20px; /* Espaciado interno */
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 20px;
+    padding-top: 170px;
+    /* Ajusta este valor según sea necesario */
 }
 
 .container {
