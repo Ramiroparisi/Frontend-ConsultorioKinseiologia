@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../../estilos/login.css'
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
 
@@ -17,7 +18,7 @@ const LoginSecretaria = () => {
     event.preventDefault();
 
     // Validación de los inputs
-    if (!email || !password) {
+    if (!email && !password) {
       setError('Todos los campos son obligatorios');
       return;
     }
@@ -71,7 +72,7 @@ const LoginSecretaria = () => {
   return (
     <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
   
-      <div className="col-md-4">
+      <div className="col-md-2">
         <h1 className="text-center mb-4">Iniciar sesión</h1>
         <Form onSubmit={handleLogin}>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -96,7 +97,7 @@ const LoginSecretaria = () => {
             />
           </Form.Group>
 
-          <Button type="submit" className="btn btn-primary" disabled={loading}>
+          <Button type="submit" className="btn btn-custom" disabled={loading}>
             {loading ? (
               <>
                 <Spinner
@@ -111,6 +112,7 @@ const LoginSecretaria = () => {
               </>
             ) : ('Ingresar')}
           </Button>
+          
         </Form>
       </div>
     </section>

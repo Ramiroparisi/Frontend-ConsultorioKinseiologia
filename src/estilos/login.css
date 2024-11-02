@@ -44,3 +44,26 @@ input[type="password"] {
   margin-bottom: 1rem;
   text-align: center;
 }
+
+.btn-custom{
+  background-color: #ccc;
+  border-color: black;
+
+}
+
+.btn-custom:hover{
+  background-color: black;
+  border-color: black;
+}
+
+.btn-custom2{
+  background-color: #d63333;
+  border-color: black;
+
+}
+
+.btn-custom2:hover{
+  background-color: black;
+  border-color: black;
+}
+

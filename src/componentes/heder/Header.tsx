@@ -55,7 +55,6 @@ const Header: React.FC = () => {
         </ul>
         <div className="d-flex ms-3">
           <button className="btn btn-outline-primary me-2" onClick={() => handleNavigation('/')}>Login</button>
-          <button className="btn btn-primary" onClick={() => handleNavigation('/signUp')}>Sign-up</button>
         </div>
       </div>
     </nav>

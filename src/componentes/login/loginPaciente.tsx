@@ -12,12 +12,15 @@ const LoginPaciente = () => {
   
   const navigate = useNavigate(); // Hook para redirigir
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
     // Validación de los inputs
-    if (!email || !password) {
+    if (!email && !password) {
       setError('Todos los campos son obligatorios');
       return;
     }
@@ -73,7 +76,7 @@ const LoginPaciente = () => {
   return (
     <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
       
-      <div className="col-md-4">
+      <div className="col-md-2">
         <h1 className="text-center mb-4">Iniciar sesión</h1>
         <Form onSubmit={handleLogin}>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -113,7 +116,14 @@ const LoginPaciente = () => {
               </>
             ) : ('Ingresar')}
           </Button>
+          
         </Form>
+        <div className="text-center mt-4 ">
+            <p>¿No estás registrado?</p>
+            <Button type="button" className="btn btn-custom2" onClick={() => handleNavigation('/signupPaciente')}>
+              Sign Up
+            </Button>
+          </div>
       </div>
     </section>
   );
