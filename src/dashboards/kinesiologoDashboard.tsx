@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import '../estilos/kinesiologoDash.css'; // Usamos el mismo estilo que en el Dashboard del paciente
+import '../estilos/kinesiologoDash.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface Turno {
   id: number;
@@ -13,6 +15,7 @@ const KinesiologoDashboard = () => {
   const [turnos, setTurnos] = useState<Turno[]>([]);
   const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
   const [turnosRealizados, setTurnosRealizados] = useState<Turno[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // Estado para la fecha seleccionada
 
   useEffect(() => {
     const obtenerTurnos = async () => {
@@ -26,17 +29,7 @@ const KinesiologoDashboard = () => {
         if (!Array.isArray(data.data)) {
           throw new Error('La respuesta de la API no contiene un array en la propiedad "data"');
         }
-        const hoy = new Date();
-        const turnosDelDia = data.data.filter((turno: Turno) => {
-          const fechaTurno = new Date(turno.fecha);
-          return (
-            fechaTurno.getDate() === hoy.getDate() &&
-            fechaTurno.getMonth() === hoy.getMonth() &&
-            fechaTurno.getFullYear() === hoy.getFullYear()
-          );
-        });
-
-        setTurnos(turnosDelDia);
+        setTurnos(data.data);
       } catch (error) {
         console.error('Error al obtener los turnos:', error);
       }
@@ -46,25 +39,47 @@ const KinesiologoDashboard = () => {
   }, []);
 
   useEffect(() => {
-    const ahora = new Date();
+    if (!selectedDate) return;
+
     const pendientes: Turno[] = [];
     const realizados: Turno[] = [];
+    const ahora = new Date();
 
     turnos.forEach((turno) => {
       const [hora, minutos] = turno.hora.split(':').map(Number);
       const fechaTurno = new Date(turno.fecha);
       fechaTurno.setHours(hora, minutos, 0, 0);
 
-      if (fechaTurno > ahora) {
-        pendientes.push(turno);
-      } else {
-        realizados.push(turno);
+      // Filtra los turnos del día seleccionado
+      if (
+        fechaTurno.getDate() === selectedDate.getDate() &&
+        fechaTurno.getMonth() === selectedDate.getMonth() &&
+        fechaTurno.getFullYear() === selectedDate.getFullYear()
+      ) {
+        if (fechaTurno > ahora) {
+          pendientes.push(turno);
+        } else {
+          realizados.push(turno);
+        }
       }
     });
+  
+  // Los ordeno de forma ascendente porque sino, estaban por orden de llegada
+  pendientes.sort((a, b) => {
+    const [horaA, minutosA] = a.hora.split(':').map(Number);
+    const [horaB, minutosB] = b.hora.split(':').map(Number);
+    return horaA - horaB || minutosA - minutosB;
+  });
+
+  realizados.sort((a, b) => {
+    const [horaA, minutosA] = a.hora.split(':').map(Number);
+    const [horaB, minutosB] = b.hora.split(':').map(Number);
+    return horaA - horaB || minutosA - minutosB;
+  });
 
     setTurnosPendientes(pendientes);
     setTurnosRealizados(realizados);
-  }, [turnos]);
+  }, [turnos, selectedDate]);
 
   return (
     <div className="dashboard">
@@ -72,6 +87,13 @@ const KinesiologoDashboard = () => {
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="dashboard-title">Bienvenido/a, Kinesiólogo/a</h1>
+          {/* Selector de Fecha */}
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            dateFormat="dd/MM/yyyy"
+            className="form-control"
+          />
         </div>
 
         {/* Card de Turnos Realizados */}
@@ -100,7 +122,7 @@ const KinesiologoDashboard = () => {
               </div>
             ))
           ) : (
-            <p>No hay turnos realizados.</p>
+            <p>No hay turnos realizados para esta fecha.</p>
           )}
         </div>
 
@@ -139,3 +161,4 @@ const KinesiologoDashboard = () => {
 };
 
 export default KinesiologoDashboard;
+           
