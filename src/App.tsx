@@ -12,6 +12,7 @@ import KinesiologoDashboard from './dashboards/kinesiologoDashboard.tsx';
 import SignUpPaciente from './componentes/login/signupPaciente.tsx';
 import SobreNosotros from './componentes/header/sobreNosotros.tsx';
 import Contacto from './componentes/header/contacto.tsx';
+import CrearTurnoPaciente from './componentes/crearTurnos/turnoNuevoPaciente.tsx';
 
 
 const App = () => {
@@ -32,7 +33,10 @@ const App = () => {
         
         {/* Rutas para el header*/}
         <Route path="/sobreNosotros" element={<SobreNosotros />} />
-        <Route path="/contacto" element={<Contacto />} />    
+        <Route path="/contacto" element={<Contacto />} /> 
+
+        {/* Rutas para los turnos nuevos */}
+        <Route path="/turnoNuevoPaciente" element={<CrearTurnoPaciente />} />    
         
       </Routes>
     </Router>

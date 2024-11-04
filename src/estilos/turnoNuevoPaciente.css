@@ -1,0 +1,113 @@
+.dashboard {
+  background-color: #f4f6f8;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.dashboard-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.text-color {
+  color: #0066cc;
+}
+
+.appointment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.appointment-icon {
+  color: #888;
+  font-size: 1.2em;
+}
+
+.pending-icon i {
+  color: #0066cc;
+}
+
+.check-icon i {
+  color: #28a745;
+}
+
+.btn-dark {
+  background-color: #333;
+  border-color: #333;
+  color: #fff;
+}
+
+.btn-dark:hover {
+  background-color: #555;
+  border-color: #555;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+  font-size: 0.9em;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.form-control {
+  max-width: 200px;
+}
+
+.datepicker-wrapper {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.btn-link {
+  font-size: 0.9em;
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: #004085;
+  text-decoration: underline;
+}
+
+.d-flex.align-items-center .me-2 {
+  margin-right: 8px;
+}
+
+.d-flex.justify-content-center .mt-4 .btn-dark {
+  width: 100%;
+}
+
+h2.section-title {
+  font-size: 18px;
+  font-weight: 600;
+}

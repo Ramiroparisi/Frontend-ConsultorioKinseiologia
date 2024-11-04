@@ -16,7 +16,8 @@ const PacienteDashboard = () => {
   const [turnos, setTurnos] = useState<Turno[]>([]);
   const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
   const [turnosRealizados, setTurnosRealizados] = useState<Turno[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [showRealizados, setShowRealizados] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const obtenerTurnos = async () => {
@@ -40,105 +41,82 @@ const PacienteDashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (!selectedDate) return;
-
-    const pendientes: Turno[] = [];
-    const realizados: Turno[] = [];
-    const ahora = new Date();
-
-    turnos.forEach((turno) => {
-      const [hora, minutos] = turno.hora.split(':').map(Number);
-      const fechaTurno = new Date(turno.fecha);
-      fechaTurno.setHours(hora, minutos, 0, 0);
-
-      if (
-        fechaTurno.getDate() === selectedDate.getDate() &&
-        fechaTurno.getMonth() === selectedDate.getMonth() &&
-        fechaTurno.getFullYear() === selectedDate.getFullYear()
-      ) {
-        if (fechaTurno > ahora) {
-          pendientes.push(turno);
-        } else {
-          realizados.push(turno);
-        }
-      }
-    });
+    const pendientes = turnos.filter(turno => new Date(turno.fecha) > new Date());
+    const realizados = turnos.filter(turno => new Date(turno.fecha) <= new Date());
 
     pendientes.sort((a, b) => {
+      const fechaA = new Date(a.fecha);
+      const fechaB = new Date(b.fecha);
       const [horaA, minutosA] = a.hora.split(':').map(Number);
       const [horaB, minutosB] = b.hora.split(':').map(Number);
-      return horaA - horaB || minutosA - minutosB;
+      fechaA.setHours(horaA, minutosA, 0, 0);
+      fechaB.setHours(horaB, minutosB, 0, 0);
+      return fechaA.getTime() - fechaB.getTime();
     });
 
     realizados.sort((a, b) => {
+      const fechaA = new Date(a.fecha);
+      const fechaB = new Date(b.fecha);
       const [horaA, minutosA] = a.hora.split(':').map(Number);
       const [horaB, minutosB] = b.hora.split(':').map(Number);
-      return horaA - horaB || minutosA - minutosB;
+      fechaA.setHours(horaA, minutosA, 0, 0);
+      fechaB.setHours(horaB, minutosB, 0, 0);
+      return fechaA.getTime() - fechaB.getTime();
     });
 
     setTurnosPendientes(pendientes);
     setTurnosRealizados(realizados);
-  }, [turnos, selectedDate]);
-  const navigate = useNavigate();
-    const handleNavigation = (path: string) => {
+  }, [turnos]);
+
+  const handleNavigation = (path: string) => {
     navigate(path);
+  };
+
+  const handleDelete = async (turnoId: number) => {
+    if (window.confirm('¿Desea eliminar el turno?')) {
+      try {
+        const response = await fetch(`/api/turnos/${turnoId}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) {
+          throw new Error('Error al eliminar el turno');
+        }
+        setTurnos(prev => prev.filter(turno => turno.id !== turnoId));
+        setTurnosPendientes(prev => prev.filter(turno => turno.id !== turnoId));
+        setTurnosRealizados(prev => prev.filter(turno => turno.id !== turnoId));
+      } catch (error) {
+        console.error('Error al eliminar el turno:', error);
+      }
+    }
   };
 
   return (
     <div className="dashboard">
       <div className="container pt-4 pb-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="dashboard-title">Bienvenido/a (nombre del paciente)</h1>
+          <h1 className="dashboard-title">Bienvenido</h1>
           <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
+            selected={new Date()}
+            onChange={() => {}}
             dateFormat="dd/MM/yyyy"
             className="form-control"
+            disabled
           />
         </div>
 
         <div className="dashboard-card mb-4">
-          <div className="d-flex align-items-center gap-2 mb-3">
-            <span className="check-icon">
-              <i className="bi bi-check-lg"></i>
-            </span>
-            <h2 className="section-title text-color mb-0">Turnos Realizados</h2>
-          </div>
-          
-          {turnosRealizados.length > 0 ? (
-            turnosRealizados.map((turno) => (
-              <div key={turno.id} className="appointment-row">
-                <div className="d-flex align-items-center">
-                  <span className="appointment-icon me-2">
-                    <i className="bi bi-calendar"></i>
-                  </span>
-                  <span className="me-2">{new Date(turno.fecha).toLocaleDateString()}</span>
-                  <span className="appointment-icon me-2">
-                    <i className="bi bi-clock"></i>
-                  </span>
-                  <span className="me-2">{turno.hora}</span>
-                  <span className="text-secondary">- lic {turno.kinesiologo.apellido}</span>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No hay turnos realizados para esta fecha.</p>
-          )}
-        </div>
-
-        <div className="dashboard-card">
           <div className="d-flex align-items-center gap-2 mb-3">
             <span className="pending-icon">
               <i className="bi bi-clock-history"></i>
             </span>
             <h2 className="section-title text-color mb-0">Turnos Pendientes</h2>
           </div>
-          
+
           {turnosPendientes.length > 0 ? (
             turnosPendientes.map((turno) => (
-              <div key={turno.id} className="appointment-row">
+              <div key={turno.id} className="appointment-row d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center">
-                  <span className="appointment-icon">
+                  <span className="appointment-icon me-2">
                     <i className="bi bi-calendar"></i>
                   </span>
                   <span className="me-2">{new Date(turno.fecha).toLocaleDateString()}</span>
@@ -148,15 +126,51 @@ const PacienteDashboard = () => {
                   <span className="me-2">{turno.hora}</span>
                   <span className="text-secondary">- lic {turno.kinesiologo.apellido}</span>
                 </div>
+                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(turno.id)}>
+                  <i className="bi bi-trash"></i>
+                </button>
               </div>
             ))
           ) : (
             <p>No hay turnos pendientes.</p>
           )}
-          {/* Botón para solicitar nuevo turno */}
           <div className="d-flex justify-content-center mt-4">
             <button type="button" className="btn btn-dark" onClick={() => handleNavigation('/turnoNuevoPaciente')}>Solicitar nuevo turno</button>
           </div>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <span className="check-icon">
+              <i className="bi bi-check-lg"></i>
+            </span>
+            <h2 className="section-title text-color mb-0">Turnos Realizados</h2>
+            <button className="btn btn-link text-primary" onClick={() => setShowRealizados(!showRealizados)}>
+              {showRealizados ? 'Ocultar' : 'Mostrar'}
+            </button>
+          </div>
+
+          {showRealizados && (
+            turnosRealizados.length > 0 ? (
+              turnosRealizados.map((turno) => (
+                <div key={turno.id} className="appointment-row">
+                  <div className="d-flex align-items-center">
+                    <span className="appointment-icon me-2">
+                      <i className="bi bi-calendar"></i>
+                    </span>
+                    <span className="me-2">{new Date(turno.fecha).toLocaleDateString()}</span>
+                    <span className="appointment-icon me-2">
+                      <i className="bi bi-clock"></i>
+                    </span>
+                    <span className="me-2">{turno.hora}</span>
+                    <span className="text-secondary">- lic {turno.kinesiologo.apellido}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No hay turnos realizados para esta fecha.</p>
+            )
+          )}
         </div>
       </div>
     </div>
