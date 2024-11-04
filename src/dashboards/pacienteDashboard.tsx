@@ -1,108 +1,166 @@
+import { useState, useEffect } from 'react'; 
 import '../estilos/pacienteDash.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useNavigate } from 'react-router-dom';
 
-const DashboardPaciente = () => {
-    const pendingAppointments = [
-      {
-        date: '2024-11-05',
-        time: '10:00',
-        doctor: 'Dr. López',
-      },
-      {
-        date: '2024-11-20',
-        time: '15:00',
-        doctor: 'Dra. Martínez',
-      }
-    ];
-  
-    const pastAppointments = [
-      {
-        date: '2024-10-15',
-        time: '09:00',
-        doctor: 'Dr. García',
-      },
-      {
-        date: '2024-10-01',
-        time: '16:30',
-        doctor: 'Dra. Rodríguez',
-      }
-    ];
-  
-    return (
-      <div className="dashboard">
-        <div className="container pt-4 pb-4">
-          {/* Header */}
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1 className="dashboard-title">Bienvenido, Juan Pérez</h1>
-          </div>
-  
-          {/* Pending Appointments */}
-          <div className="dashboard-card mb-4">
-            <div className="d-flex align-items-center gap-2 mb-3">
-              <span className="pending-icon">
-              <i className="bi bi-clock-history"></i>
-              </span>
-              <h2 className="section-title text-color mb-0">Turnos Pendientes</h2>
-          </div>
-            
-          {pendingAppointments.map((appointment, index) => (
-            <div key={index} className="appointment-row">
-                <div className="d-flex align-items-center">
-                <span className="appointment-icon">
-                  <i className="bi bi-calendar"></i>
-                </span>
-                <span className="me-2">{appointment.date}</span>
-                <span className="appointment-icon me-2">
-                  <i className="bi bi-clock"></i>
-                </span>
-                <span className="me-2">{appointment.time}</span>
-                <span className="text-secondary">- {appointment.doctor}</span>
-                </div>
+interface Turno {
+  id: number;
+  fecha: Date;
+  hora: string;
+  kinesiologo: { apellido: string };
+}
 
-                <div className="appointment-actions">
-                <button className="btn btn-link text-primary p-1">
-                  <i className="bi bi-pencil-square"></i>
-                </button>
-                <button className="btn btn-link text-danger p-1">
-                  <i className="bi bi-trash"></i>
-                </button>
-                </div>
-            </div>
-            ))}
-  
-            <button className="btn btn-dark w-100 mt-3">
-              Solicitar Nuevo Turno
-            </button>
-          </div>
-  
-          {/* Past Appointments */}
-          <div className="dashboard-card">
-            <div className="d-flex align-items-center gap-2 mb-3">
-              <span className="check-icon">
+const PacienteDashboard = () => {
+  const [turnos, setTurnos] = useState<Turno[]>([]);
+  const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
+  const [turnosRealizados, setTurnosRealizados] = useState<Turno[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
+  useEffect(() => {
+    const obtenerTurnos = async () => {
+      try {
+        const response = await fetch('/api/turnos');
+        if (!response.ok) {
+          throw new Error('Error en la respuesta de la API');
+        }
+        const data = await response.json();
+
+        if (!Array.isArray(data.data)) {
+          throw new Error('La respuesta de la API no contiene un array en la propiedad "data"');
+        }
+        setTurnos(data.data);
+      } catch (error) {
+        console.error('Error al obtener los turnos:', error);
+      }
+    };
+
+    obtenerTurnos();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedDate) return;
+
+    const pendientes: Turno[] = [];
+    const realizados: Turno[] = [];
+    const ahora = new Date();
+
+    turnos.forEach((turno) => {
+      const [hora, minutos] = turno.hora.split(':').map(Number);
+      const fechaTurno = new Date(turno.fecha);
+      fechaTurno.setHours(hora, minutos, 0, 0);
+
+      if (
+        fechaTurno.getDate() === selectedDate.getDate() &&
+        fechaTurno.getMonth() === selectedDate.getMonth() &&
+        fechaTurno.getFullYear() === selectedDate.getFullYear()
+      ) {
+        if (fechaTurno > ahora) {
+          pendientes.push(turno);
+        } else {
+          realizados.push(turno);
+        }
+      }
+    });
+
+    pendientes.sort((a, b) => {
+      const [horaA, minutosA] = a.hora.split(':').map(Number);
+      const [horaB, minutosB] = b.hora.split(':').map(Number);
+      return horaA - horaB || minutosA - minutosB;
+    });
+
+    realizados.sort((a, b) => {
+      const [horaA, minutosA] = a.hora.split(':').map(Number);
+      const [horaB, minutosB] = b.hora.split(':').map(Number);
+      return horaA - horaB || minutosA - minutosB;
+    });
+
+    setTurnosPendientes(pendientes);
+    setTurnosRealizados(realizados);
+  }, [turnos, selectedDate]);
+  const navigate = useNavigate();
+    const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  return (
+    <div className="dashboard">
+      <div className="container pt-4 pb-4">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1 className="dashboard-title">Bienvenido/a (nombre del paciente)</h1>
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            dateFormat="dd/MM/yyyy"
+            className="form-control"
+          />
+        </div>
+
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <span className="check-icon">
               <i className="bi bi-check-lg"></i>
-              </span>
-              <h2 className="section-title text-color mb-0">Turnos Asistidos</h2>
-            </div>
-            
-            {pastAppointments.map((appointment, index) => (
-              <div key={index} className="appointment-row">
+            </span>
+            <h2 className="section-title text-color mb-0">Turnos Realizados</h2>
+          </div>
+          
+          {turnosRealizados.length > 0 ? (
+            turnosRealizados.map((turno) => (
+              <div key={turno.id} className="appointment-row">
                 <div className="d-flex align-items-center">
                   <span className="appointment-icon me-2">
                     <i className="bi bi-calendar"></i>
                   </span>
-                  <span className="me-2">{appointment.date}</span>
+                  <span className="me-2">{new Date(turno.fecha).toLocaleDateString()}</span>
                   <span className="appointment-icon me-2">
                     <i className="bi bi-clock"></i>
                   </span>
-                  <span className="me-2">{appointment.time}</span>
-                  <span className="text-secondary">- {appointment.doctor}</span>
+                  <span className="me-2">{turno.hora}</span>
+                  <span className="text-secondary">- lic {turno.kinesiologo.apellido}</span>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <p>No hay turnos realizados para esta fecha.</p>
+          )}
+        </div>
+
+        <div className="dashboard-card">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <span className="pending-icon">
+              <i className="bi bi-clock-history"></i>
+            </span>
+            <h2 className="section-title text-color mb-0">Turnos Pendientes</h2>
+          </div>
+          
+          {turnosPendientes.length > 0 ? (
+            turnosPendientes.map((turno) => (
+              <div key={turno.id} className="appointment-row">
+                <div className="d-flex align-items-center">
+                  <span className="appointment-icon">
+                    <i className="bi bi-calendar"></i>
+                  </span>
+                  <span className="me-2">{new Date(turno.fecha).toLocaleDateString()}</span>
+                  <span className="appointment-icon me-2">
+                    <i className="bi bi-clock"></i>
+                  </span>
+                  <span className="me-2">{turno.hora}</span>
+                  <span className="text-secondary">- lic {turno.kinesiologo.apellido}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No hay turnos pendientes.</p>
+          )}
+          {/* Botón para solicitar nuevo turno */}
+          <div className="d-flex justify-content-center mt-4">
+            <button type="button" className="btn btn-dark" onClick={() => handleNavigation('/turnoNuevoPaciente')}>Solicitar nuevo turno</button>
           </div>
         </div>
       </div>
-    );
-  };
-  
-  export default DashboardPaciente;
+    </div>
+  );
+};
+
+export default PacienteDashboard;
