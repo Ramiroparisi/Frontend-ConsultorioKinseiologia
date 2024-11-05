@@ -2,8 +2,7 @@
     background-color: #f0f2f5;
     min-height: 100vh;
     padding: 20px;
-    padding-top: 170px;
-    /* Ajusta este valor según sea necesario */
+    padding-top: 170px; /* Ajusta este valor según sea necesario */
 }
 
 .container {
@@ -22,37 +21,36 @@
     margin-bottom: 10px; /* Reduce el margen inferior */
 }
 
-
 .dashboard-card {
-    background: white;
-    border-radius: 8px;
-    padding: 1.25rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff; /* Color de fondo */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 1.25rem; /* Espaciado interno */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Sombra */
+    margin-bottom: 20px; /* Espaciado inferior */
 }
 
 .section-title {
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 1.05rem; /* Tamaño de la fuente del título */
+    font-weight: 600; /* Grosor de la fuente */
+    color: #333; /* Color del texto */
 }
-
-.text-color { color: #000000; }
-
 
 .appointment-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
-    border-bottom: 1px solid #ebe7e5;
+    border-bottom: 1px solid #ebe7e5; /* Línea separadora entre turnos */
 }
 
 .appointment-row:last-child {
-    border-bottom: none;
+    border-bottom: none; /* Sin borde en la última fila */
 }
 
 .appointment-icon {
-    color: #6b7280;
-    font-size: 0.875rem;
+    color: #808080; /* Cambia el color del icono */
+    font-size: 16px; /* Ajusta el tamaño del icono */
+    margin-right: 0.5rem; /* Espaciado a la derecha del icono */
 }
 
 .appointment-actions {
@@ -90,7 +88,7 @@
 }
 
 .gap-2 {
-    gap: 0.5rem;
+    gap: 0.5rem; /* Espaciado entre elementos con esta clase */
 }
 
 .pending-icon {
@@ -98,30 +96,8 @@
     font-size: 22px; /* Tamaño del icono */
 }
 
-.appointment-icon {
-    color: #808080; /* Cambia el color del icono */
-    font-size: 16px; /* Ajusta el tamaño del icono */
-    margin-right: 0.5rem; /* Espaciado a la derecha del icono */
-}
-
-
 .check-icon {
     color: #28a745; /* Color del icono (verde para el check) */
     font-size: 24px; /* Tamaño del icono */
     margin-right: -0.2rem; /* Espaciado a la derecha del icono */
-}
-
-.section-title {
-    font-size: 1.05rem; /* Tamaño de la fuente del título */
-    font-weight: 600; /* Grosor de la fuente */
-    color: #333; /* Color del texto */
-}
-
-.dashboard-card {
-    background-color: #ffffff; /* Color de fondo */
-    border: 1px solid #ddd; /* Borde */
-    border-radius: 8px; /* Bordes redondeados */
-    padding: 20px; /* Espaciado interno */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra */
-    margin-bottom: 20px; /* Espaciado inferior */
 }
