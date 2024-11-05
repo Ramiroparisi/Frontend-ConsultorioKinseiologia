@@ -28,8 +28,10 @@ const CrearTurnoPaciente = () => {
   const [selectedEspecialidad, setSelectedEspecialidad] = useState<number | null>(null);
   const [selectedKinesiologo, setSelectedKinesiologo] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [availableHours, setAvailableHours] = useState<string[]>([]);
   const navigate = useNavigate();
+
 
   // Obtener especialidades al cargar el componente
   useEffect(() => {
@@ -46,20 +48,21 @@ const CrearTurnoPaciente = () => {
   }, []);
 
   // Obtener kinesiólogos al seleccionar una especialidad
-  useEffect(() => {
-    if (selectedEspecialidad) {
-      const fetchKinesiologos = async () => {
-        try {
-          const response = await fetch(`/api/especialidades/${selectedEspecialidad}/kinesiologos`);
-          const data = await response.json();
-          setKinesiologos(data.data);
-        } catch (error) {
-          console.error('Error al obtener los kinesiólogos:', error);
-        }
-      };
-      fetchKinesiologos();
-    }
-  }, [selectedEspecialidad]);
+useEffect(() => {
+  if (selectedEspecialidad && !isNaN(selectedEspecialidad)) {  // Verificamos que no sea NaN
+    const fetchKinesiologos = async () => {
+      try {
+        console.log('Fetching kinesiólogos para especialidad ID:', selectedEspecialidad);
+        const response = await fetch(`http://localhost:3000/api/especialidades/${selectedEspecialidad}/kinesiologos`);
+        const data = await response.json();
+        setKinesiologos(data.data.kinesiologos);
+      } catch (error) {
+        console.error('Error al obtener los kinesiólogos:', error);
+      }
+    };
+    fetchKinesiologos();
+  }
+}, [selectedEspecialidad]);
 
   // Obtener horas disponibles al seleccionar una fecha
   useEffect(() => {
@@ -94,6 +97,7 @@ const CrearTurnoPaciente = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             kinesiologoId: selectedKinesiologo,
+            paciente: 2,
             fecha: selectedDate,
             hora: selectedHour,
           }),
@@ -121,18 +125,25 @@ const CrearTurnoPaciente = () => {
       <h1>Crear Turno</h1>
       <div className="form-group">
         <label>Especialidad:</label>
-        <select
-          className="form-control"
-          value={selectedEspecialidad || ''}
-          onChange={(e) => setSelectedEspecialidad(Number(e.target.value))}
-        >
-          <option value="">Seleccione una especialidad</option>
-          {especialidades.map((especialidad) => (
-            <option key={especialidad.id} value={especialidad.id}>
-              {especialidad.nombre}
-            </option>
-          ))}
-        </select>
+    <select
+      className="form-control"
+      value={selectedEspecialidad || ''}
+      onChange={(e) => {
+        const especialidadId = Number(e.target.value);
+         if (!isNaN(especialidadId)) {
+          setSelectedEspecialidad(especialidadId);
+         } else {
+          console.error('Error: El valor seleccionado no es un número válido');
+         }
+      }}
+    >
+   <option value="">Seleccione una especialidad</option>
+      {especialidades.map((especialidad) => (
+    <option key={especialidad.id} value={especialidad.id}>
+      {especialidad.nombre}
+    </option>
+  ))}
+    </select>
       </div>
       {selectedEspecialidad && (
         <div className="form-group">
@@ -163,18 +174,23 @@ const CrearTurnoPaciente = () => {
           />
         </div>
       )}
-      {selectedDate && availableHours.length > 0 && (
-        <div className="form-group">
-          <label>Horas disponibles:</label>
-          <select className="form-control">
-            {availableHours.map((hour) => (
-              <option key={hour} value={hour}>
-                {hour}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+  {selectedDate && availableHours.length > 0 && (
+    <div className="form-group">
+      <label>Horas disponibles:</label>
+      <select
+        className="form-control"
+        value={selectedHour || ''}
+       onChange={(e) => setSelectedHour(e.target.value)}
+     >
+       <option value="">Seleccione una hora</option>
+        {availableHours.map((hour) => (
+          <option key={hour} value={hour}>
+           {hour}
+         </option>
+        ))}
+      </select>
+   </div>
+  )}
       <button className="btn btn-primary mt-3" onClick={handleConfirm}>
         Confirmar Turno
       </button>
