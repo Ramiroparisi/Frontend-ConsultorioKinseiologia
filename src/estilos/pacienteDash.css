@@ -93,13 +93,13 @@
     background-color: rgba(255, 0, 0, 0.2); /* Color de fondo al pasar el mouse para el botón de eliminar */
 }
 
-.btn-dark {
+button.btn.btn-dark {
     background-color: #111827;
     border-color: #ffffff;
     padding: 0.5rem 1rem;
 }
 
-.btn-dark:hover {
+button.btn.btn-dark:hover {
     background-color: #1f2937;
     border-color: #1f2937;
 }

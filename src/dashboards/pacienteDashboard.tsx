@@ -17,7 +17,13 @@ interface Turno {
   estado: string;
   importeTotal: number;
   paciente: number;
-  kinesiologo: number;
+  kinesiologo: Kinesiologo;
+}
+
+interface Kinesiologo {
+  id: number;
+  nombre: string;
+  apellido: string;
 }
 
 const PacienteDashboard: React.FC = () => {
@@ -83,7 +89,9 @@ const PacienteDashboard: React.FC = () => {
                   <i className="bi bi-clock"></i>
                 </span>
                 <span className="me-2">{turno.hora}</span>
-                <span className="text-secondary">- Kinesiologo #{turno.kinesiologo}</span>
+                <span className="text-secondary">
+                  - Lic. {turno.kinesiologo.nombre} {turno.kinesiologo.apellido}
+                </span>
               </div>
   
               <div className="appointment-actions">
@@ -120,7 +128,9 @@ const PacienteDashboard: React.FC = () => {
                   <i className="bi bi-clock"></i>
                 </span>
                 <span className="me-2">{turno.hora}</span>
-                <span className="text-secondary">- Kinesiologo #{turno.kinesiologo}</span>
+                <span className="text-secondary">- 
+                  Lic. {turno.kinesiologo.nombre} {turno.kinesiologo.apellido}
+                </span>
               </div>
             </div>
           ))}
