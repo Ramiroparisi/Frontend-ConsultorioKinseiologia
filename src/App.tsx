@@ -15,6 +15,7 @@ import SobreNosotros from './componentes/header/sobreNosotros.tsx';
 import Contacto from './componentes/header/contacto.tsx';
 import CrearTurnoPaciente from './componentes/crearTurnos/turnoNuevoPaciente.tsx';
 import DashboardHeader from './componentes/header/dashboardHeader.tsx';
+import DashboardHeaderKine from './componentes/header/dashboardHeaderKine.tsx';
 
 
 const App = () => {
@@ -30,7 +31,7 @@ const App = () => {
          {/* Rutas para los dashboards */}
     
         <Route path="/pacienteDashboard" element={<><DashboardHeader /><PacienteDashboard /></>} />
-        <Route path="/kinesiologoDashboard" element={<><DashboardHeader /><KinesiologoDashboard /></>} />
+        <Route path="/kinesiologoDashboard" element={<><DashboardHeaderKine /><KinesiologoDashboard /></>} />
         
         {/* Rutas para el header*/}
         <Route path="/sobreNosotros" element={<><Header /><SobreNosotros /></>} />
