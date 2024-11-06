@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../estilos/pacienteDash.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+
+interface Paciente {
+  nombre: string;
+  apellido: string;
+  turnos: Turno[]; 
+}
 
 interface Turno {
   id: number;
@@ -14,8 +23,7 @@ interface Turno {
 const PacienteDashboard: React.FC = () => {
   const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
   const [turnosRealizados, setTurnosRealizados] = useState<Turno[]>([]);
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
+  const [paciente, setPaciente] = useState<Paciente | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,9 +38,12 @@ const PacienteDashboard: React.FC = () => {
         }
         const data = await response.json();
 
-        // Almacena nombre y apellido del paciente
-        setNombre(data.nombre);
-        setApellido(data.apellido);
+        // Almacena los datos completos del paciente
+        setPaciente({
+          nombre: data.nombre,
+          apellido: data.apellido,
+          turnos: data.turnos,
+        });
 
         // Divide los turnos en pendientes y realizados
         setTurnosPendientes(data.turnos.filter((turno: Turno) => turno.estado === 'Activo'));
@@ -51,15 +62,13 @@ const PacienteDashboard: React.FC = () => {
       <div className="container pt-4 pb-4">
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="dashboard-title">Bienvenido, {nombre} {apellido}</h1>
+          <h1 className="dashboard-title">Bienvenido, {paciente?.nombre} {paciente?.apellido}</h1>
         </div>
   
         {/* Turnos Pendientes */}
         <div className="dashboard-card mb-4">
           <div className="d-flex align-items-center gap-2 mb-3">
-            <span className="pending-icon">
               <i className="bi bi-clock-history"></i>
-            </span>
             <h2 className="section-title">Turnos Pendientes</h2>
           </div>
   
@@ -119,7 +128,6 @@ const PacienteDashboard: React.FC = () => {
       </div>
     </div>
   );
-  
 };
 
 export default PacienteDashboard;

@@ -33,6 +33,23 @@
     font-size: 1.05rem; /* Tamaño de la fuente del título */
     font-weight: 600; /* Grosor de la fuente */
     color: #333; /* Color del texto */
+    margin: 0; /* Eliminar márgenes adicionales que puedan afectar la alineación */
+}
+
+/* Clase para la alineación del ícono y el texto */
+.d-flex {
+    display: flex;
+    align-items: center; /* Alineación vertical en el centro */
+    gap: 8px; /* Espaciado horizontal entre el ícono y el texto */
+}
+
+/* Asegura que el ícono se alinee correctamente con el texto */
+.bi-clock-history {
+    font-size: 22px; /* Tamaño del ícono */
+    color: #007bff; /* Color azul */
+    display: inline-block; /* Asegura que el icono esté en línea */
+    margin-bottom: 0; /* Eliminar márgenes inferiores que puedan desalinear */
+    vertical-align: middle; /* Asegura que el icono se alinee verticalmente con el texto */
 }
 
 .appointment-row {
@@ -88,12 +105,7 @@
 }
 
 .gap-2 {
-    gap: 0.5rem; /* Espaciado entre elementos con esta clase */
-}
-
-.pending-icon {
-    color: #0000FF; /* Color del icono */
-    font-size: 22px; /* Tamaño del icono */
+    gap: 0.8rem; /* Espaciado entre elementos con esta clase */
 }
 
 .check-icon {
