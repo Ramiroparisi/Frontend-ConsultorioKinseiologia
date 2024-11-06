@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import '../estilos/kinesiologoDash.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -29,6 +31,8 @@ const KinesiologoDashboard: React.FC = () => {
   const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
   const [turnosRealizados, setTurnosRealizados] = useState<Turno[]>([]);
   const [kinesiologo, setKinesiologo] = useState<Kinesiologo | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,8 +53,17 @@ const KinesiologoDashboard: React.FC = () => {
           turnos: data.turnos,
         });
 
-        setTurnosPendientes(data.turnos.filter((turno: Turno) => turno.estado === 'Activo'));
-        setTurnosRealizados(data.turnos.filter((turno: Turno) => turno.estado === 'Realizado'));
+        // Ordeno los turnos
+        const turnosPendientesOrdenados = data.turnos
+          .filter((turno: Turno) => turno.estado === 'Activo')
+          .sort((a: Turno, b: Turno) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime() || a.hora.localeCompare(b.hora));
+
+        const turnosRealizadosOrdenados = data.turnos
+          .filter((turno: Turno) => turno.estado === 'Realizado')
+          .sort((a: Turno, b: Turno) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime() || a.hora.localeCompare(b.hora));
+
+        setTurnosPendientes(turnosPendientesOrdenados);
+        setTurnosRealizados(turnosRealizadosOrdenados);
       } catch (error) {
         console.error('Error al obtener los datos del paciente:', error);
         navigate('/');
@@ -71,14 +84,31 @@ const KinesiologoDashboard: React.FC = () => {
         if (!response.ok) {
           throw new Error('Error al cancelar el turno');
         }
-
-        // Actualiza la lista de turnos sin el turno eliminado
         setTurnosPendientes(prevTurnos => prevTurnos.filter(turno => turno.id !== turnoId));
       } catch (error) {
         console.error('Error al cancelar el turno:', error);
       }
     }
   };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+
+  const turnosFiltrados = turnosPendientes.filter(turno => {
+    const fechaTurno = new Date(turno.fecha).toDateString();
+    const fechaSeleccionada = selectedDate ? selectedDate.toDateString() : null;
+
+    const coincideFecha = !selectedDate || fechaTurno === fechaSeleccionada;
+    const coincideBusqueda = turno.paciente.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                             turno.paciente.apellido.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return coincideFecha && coincideBusqueda;
+  });
 
   return (
     <div className="dashboard">
@@ -87,13 +117,30 @@ const KinesiologoDashboard: React.FC = () => {
           <h1 className="dashboard-title">Bienvenido, {kinesiologo?.nombre} {kinesiologo?.apellido}</h1>
         </div>
 
+        <div className="d-flex gap-3 mb-4">
+          <input
+            type="text"
+            placeholder="Buscar por nombre o apellido"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="form-control"
+          />
+          <DatePicker
+            selected={selectedDate}
+            onChange={handleDateChange}
+            placeholderText="Selecciona una fecha"
+            dateFormat="dd/MM/yyyy"
+            className="form-control"
+          />
+        </div>
+
         <div className="dashboard-card mb-4">
           <div className="d-flex align-items-center gap-2 mb-3">
             <i className="bi bi-clock-history"></i>
             <h2 className="section-title">Turnos Pendientes</h2>
           </div>
 
-          {turnosPendientes.map((turno, index) => (
+          {turnosFiltrados.map((turno, index) => (
             <div key={index} className="appointment-row">
               <div className="d-flex align-items-center">
                 <span className="appointment-icon">
@@ -122,7 +169,6 @@ const KinesiologoDashboard: React.FC = () => {
               </div>
             </div>
           ))}
-
         </div>
 
         <div className="dashboard-card mb-4">
