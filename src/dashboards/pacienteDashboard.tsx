@@ -12,7 +12,7 @@ interface Paciente {
 
 interface Turno {
   id: number;
-  fecha: string;
+  fecha: Date;
   hora: string;
   estado: string;
   importeTotal: number;
@@ -56,7 +56,7 @@ const PacienteDashboard: React.FC = () => {
         setTurnosRealizados(data.turnos.filter((turno: Turno) => turno.estado === 'Realizado'));
       } catch (error) {
         console.error('Error al obtener los datos del paciente:', error);
-        navigate('/login'); // Redirige al login si hay un error
+        navigate('/'); // Redirige al login si hay un error
       }
     };
 

@@ -51,3 +51,14 @@
   body, .content {
     margin-top: 60px; /* Ajusta el margen superior para que no se superponga con el header */
   }
+
+  .navbar-nav .nav-item .dropdown-menu .dropdown-item.cerrar-sesion {
+    background-color: red;
+    color: white;
+  }
+  
+  .navbar-nav .nav-item .dropdown-menu .dropdown-item.cerrar-sesion:hover,
+  .navbar-nav .nav-item .dropdown-menu .dropdown-item.cerrar-sesion:focus {
+    background-color: darkred; /* Un color más oscuro al pasar el mouse */
+    color: white;
+  }

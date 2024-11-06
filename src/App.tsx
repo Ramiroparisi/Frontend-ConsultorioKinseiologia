@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Header from './componentes/header/Header.tsx';
 import HomePages from './homePage.tsx';
 import LoginKinesiolgo from './componentes/login/loginKinesiologo.tsx';
@@ -13,30 +14,30 @@ import SignUpPaciente from './componentes/login/signupPaciente.tsx';
 import SobreNosotros from './componentes/header/sobreNosotros.tsx';
 import Contacto from './componentes/header/contacto.tsx';
 import CrearTurnoPaciente from './componentes/crearTurnos/turnoNuevoPaciente.tsx';
+import DashboardHeader from './componentes/header/dashboardHeader.tsx';
 
 
 const App = () => {
   return (
     <Router>
-      <Header/>
       <Routes>
-        <Route path="/" element={<HomePages />} />
-        <Route path="/loginKinesiologo" element={<LoginKinesiolgo />} />
-        <Route path="/loginPaciente" element={<LoginPaciente />} />
-        <Route path="/loginSecretaria" element={<LoginSecretaria />} />
-        <Route path="/signupPaciente" element={<SignUpPaciente />} />
+        <Route path="/" element={<><Header /><HomePages /></>} />
+        <Route path="/loginKinesiologo" element={<><Header /><LoginKinesiolgo /></>} />
+        <Route path="/loginPaciente" element={<><Header /><LoginPaciente /></>} />
+        <Route path="/loginSecretaria" element={<><Header /><LoginSecretaria /></>} />
+        <Route path="/signupPaciente" element={<><Header /><SignUpPaciente /></>} />
 
          {/* Rutas para los dashboards */}
     
-        <Route path="/pacienteDashboard" element={<PacienteDashboard />} />
-        <Route path="/kinesiologoDashboard" element={<KinesiologoDashboard />} />
+        <Route path="/pacienteDashboard" element={<><DashboardHeader /><PacienteDashboard /></>} />
+        <Route path="/kinesiologoDashboard" element={<><DashboardHeader /><KinesiologoDashboard /></>} />
         
         {/* Rutas para el header*/}
-        <Route path="/sobreNosotros" element={<SobreNosotros />} />
-        <Route path="/contacto" element={<Contacto />} /> 
+        <Route path="/sobreNosotros" element={<><Header /><SobreNosotros /></>} />
+        <Route path="/contacto" element={<><Header /><Contacto /></>} /> 
 
         {/* Rutas para los turnos nuevos */}
-        <Route path="/turnoNuevoPaciente" element={<CrearTurnoPaciente />} />    
+        <Route path="/turnoNuevoPaciente" element={<><Header /><CrearTurnoPaciente /></>} />
         
       </Routes>
     </Router>
