@@ -17,7 +17,7 @@ const Header = () => {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
-            <button className="btn btn-outline-primary me-2" onClick={() => handleNavigation('#')}>Inicio</button>
+            <button className="btn btn-outline-primary me-2" onClick={() => handleNavigation('/')}>Inicio</button>
           </li>
           <li className="nav-item">
             <button className="btn btn-outline-primary me-2" onClick={() => handleNavigation('/sobreNosotros')}>Sobre Nosotros</button>
