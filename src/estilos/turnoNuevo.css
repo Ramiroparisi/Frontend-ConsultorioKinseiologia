@@ -1,0 +1,41 @@
+.container-nt {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 0 auto; /* Centra horizontalmente */
+    max-width: 450px; /* Ajusta el ancho según lo que prefieras */
+    margin-top: -140px;
+    
+}
+
+.dashboard-nt {
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centra verticalmente */
+}
+
+button.btn-dark:hover {
+    background-color: #1f2937;
+    border-color: #1f2937;
+}
+
+.form-background {
+    background-color: #ffffff; /* Color sólido */
+    padding: 40px;
+    border-radius: 8px;
+  }
+
+.btn-dark {
+    display: block; /* Hace que el botón ocupe el ancho completo del contenedor */
+    margin: 0 auto;
+    
+}
+
+.dashboard-title-nt {
+    text-align: center; /* Centra el texto */
+    margin-bottom: 1rem; /* Ajusta el margen inferior si es necesario */
+}

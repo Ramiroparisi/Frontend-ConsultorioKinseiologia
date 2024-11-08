@@ -1,201 +1,315 @@
-import { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { useNavigate } from 'react-router-dom';
-import '../../estilos/turnoNuevoPaciente.css';
+import React, { useState, useEffect } from 'react';
+import '../../estilos/turnoNuevo.css';
 
-interface Kinesiologo {
-  id: number;
-  apellido: string;
-}
+// Definir los tipos para los consultorios
+interface Consultorio {
+    id: number;
+    nombre: string;
+    domicilio: string;  // Agregamos el domicilio a los datos que se reciben
+  }
 
 interface Especialidad {
-  id: number;
-  nombre: string;
-  kinesiologos: Kinesiologo[];
-}
-interface Turno {
-  id: number;
-  fecha: Date;
-  hora: string;
-  paciente: { nombre: string };
-  kinesiologo: { apellido: string };
-}
+    id: number;
+    nombre: string;
+    estado: boolean; // Estado de la especialidad
+  }
 
-const CrearTurnoPaciente = () => {
+interface Kinesiologo {
+    id: number;
+    nombre: string;
+    apellido: string
+    especialidadId: number;
+    consultorioId: number;
+  }
+
+// Interfaz para Disponibilidad
+interface Disponibilidad {
+    id: number;
+    horariosDisponibles: string[];
+  }
+  
+
+const TurnoForm: React.FC = () => {
+  // Estados para los campos del formulario
+  const [consultorio, setConsultorio] = useState<Consultorio | null>(null);
+  const [consultorios, setConsultorios] = useState<Consultorio[]>([]);
+  const [especialidad, setEspecialidad] = useState<Especialidad | null>(null);
   const [especialidades, setEspecialidades] = useState<Especialidad[]>([]);
+  const [kinesiologo, setKinesiologo] = useState<string>('');
   const [kinesiologos, setKinesiologos] = useState<Kinesiologo[]>([]);
-  const [selectedEspecialidad, setSelectedEspecialidad] = useState<number | null>(null);
-  const [selectedKinesiologo, setSelectedKinesiologo] = useState<number | null>(null);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
-  const [availableHours, setAvailableHours] = useState<string[]>([]);
-  const navigate = useNavigate();
+  const [fecha, setFecha] = useState<string>('');
+  const [hora, setHora] = useState<string>('');
+  const [disponibilidades, setDisponibilidades] = useState<Disponibilidad | null>(null);
+  const [mensaje, setMensaje] = useState<string>('');
 
 
-  // Obtener especialidades al cargar el componente
-  useEffect(() => {
-    const fetchEspecialidades = async () => {
-      try {
-        const response = await fetch('/api/especialidades');
-        const data = await response.json();
-        setEspecialidades(data.data);
-      } catch (error) {
-        console.error('Error al obtener las especialidades:', error);
+  // Función para obtener los consultorios 
+  const fetchConsultorios = async () => {
+    try {
+      const response = await fetch('/api/consultorios',{
+        method: 'GET',
+        credentials: 'include', // Incluye cookies en la solicitud
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los consultorios');
       }
-    };
+      const data = await response.json();
+      setConsultorios(data.data); // Asignamos los consultorios a su estado
+    } catch (error) {
+      console.error('Error al obtener los consultorios:', error);
+    }
+  };
+
+  // Función para obtener las especialidades activas 
+  const fetchEspecialidades = async () => {
+    try {
+      const response = await fetch('/api/especialidades', {
+        method: 'GET',
+        credentials: 'include', // Incluir cookies si son necesarias
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener las especialidades');
+      }
+      const data = await response.json();
+      // Filtrar solo las especialidades activas (estado: true)
+      setEspecialidades(data.data.filter((especialidad: Especialidad) => especialidad.estado));
+    } catch (error) {
+      console.error('Error al obtener las especialidades:', error);
+    }
+  };
+
+  // Función para obtener los kinesiólogos asociados a una especialidad
+  const fetchKinesiologos = async (especialidadId: number, consultorioId: number) => {
+    try {
+      const response = await fetch(`/api/especialidades/${especialidadId}/${consultorioId}/kinesiologos`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los kinesiólogos');
+      }
+      const data = await response.json();
+      setKinesiologos(data.data);
+    } catch (error) {
+      console.error('Error al obtener los kinesiólogos:', error);
+    }
+  };
+
+  const fetchDisponibilidades = async (fecha: string, kinesiologoId: number) => {
+    try {
+      const response = await fetch(`/api/disponibilidad/${fecha}/${kinesiologoId}/disponibilidad`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los horarios disponibles');
+      }
+      const data = await response.json();
+      setDisponibilidades(data); // Actualiza las horas disponibles según la respuesta del backend
+    } catch (error) {
+      console.error('Error al obtener los horarios disponibles:', error);
+    }
+  };
+
+  // Llamada a la API para obtener los consultorios y especialidades cuando el componente se monta
+  useEffect(() => {
+    fetchConsultorios();
     fetchEspecialidades();
   }, []);
 
-  // Obtener kinesiólogos al seleccionar una especialidad
-useEffect(() => {
-  if (selectedEspecialidad && !isNaN(selectedEspecialidad)) {  // Verificamos que no sea NaN
-    const fetchKinesiologos = async () => {
-      try {
-        console.log('Fetching kinesiólogos para especialidad ID:', selectedEspecialidad);
-        const response = await fetch(`http://localhost:3000/api/especialidades/${selectedEspecialidad}/kinesiologos`);
-        const data = await response.json();
-        setKinesiologos(data.data.kinesiologos);
-      } catch (error) {
-        console.error('Error al obtener los kinesiólogos:', error);
-      }
-    };
-    fetchKinesiologos();
-  }
-}, [selectedEspecialidad]);
-
-  // Obtener horas disponibles al seleccionar una fecha
+  // Efecto que se ejecuta cuando se selecciona una especialidad
   useEffect(() => {
-    if (selectedDate && selectedKinesiologo) {
-      const fetchAvailableHours = async () => {
-        try {
-          const formattedDate = selectedDate.toISOString().split('T')[0];
-          const response = await fetch(`/api/turnos/${selectedKinesiologo}?date=${formattedDate}`);
-          const turnos = await response.json();
-
-          // Generar horarios de 9 a 18, excluyendo los ya asignados
-          const allHours = Array.from({ length: 10 }, (_, i) => `${9 + i}:00`);
-          const assignedHours = turnos.data.map((turno: Turno) => turno.hora);
-          const availableHours = allHours.filter(hour => !assignedHours.includes(hour));
-
-          setAvailableHours(availableHours);
-        } catch (error) {
-          console.error('Error al obtener las horas disponibles:', error);
-        }
-      };
-      fetchAvailableHours();
+    if (especialidad && consultorio) {
+      fetchKinesiologos(especialidad.id, consultorio.id);
     }
-  }, [selectedDate, selectedKinesiologo]);
+  }, [especialidad,consultorio]);
 
-  // Confirmar el turno
-  const handleConfirm = async () => {
-    if (selectedKinesiologo && selectedDate && availableHours.length > 0) {
-      const selectedHour = availableHours[0]; // Puedes cambiar para seleccionar otra hora de la lista
-      try {
-        const response = await fetch('/api/turnos', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            kinesiologoId: selectedKinesiologo,
-            paciente: 2,
-            fecha: selectedDate,
-            hora: selectedHour,
-          }),
-        });
-        if (response.ok) {
-          alert('Turno creado exitosamente');
-          navigate('/dashboard');
-        } else {
-          throw new Error('Error al crear el turno');
+    // Efecto que se ejecuta cuando se selecciona un kinesiólogo
+    useEffect(() => {
+        if (kinesiologo && fecha) {
+          fetchDisponibilidades(fecha, Number(kinesiologo));
         }
-      } catch (error) {
-        console.error('Error al confirmar el turno:', error);
-      }
-    }
+      }, [fecha, kinesiologo]);
+
+
+// Función para manejar el cambio de consultorio
+const handleConsultorioChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedConsultorio = consultorios.find((c) => c.id === parseInt(event.target.value));
+    setConsultorio(selectedConsultorio || null);
+
+        // Reseteamos los campos dependientes
+        setEspecialidad(null);
+        setKinesiologo('');
+        setKinesiologos([]);
+        setFecha('');
+        setHora('');
   };
 
-  // Solo permite seleccionar días hábiles (lunes a viernes)
-  const isWeekday = (date: Date) => {
-    const day = date.getDay();
-    return day !== 0 && day !== 6;
+// Función para manejar el cambio de especialidad
+const handleEspecialidadChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedEspecialidad = especialidades.find((esp) => esp.id === parseInt(event.target.value));
+    setEspecialidad(selectedEspecialidad || null);
+
+        // Reseteamos los campos dependientes
+        setKinesiologo('');
+        setKinesiologos([]);
+        setFecha('');
+        setHora('');
   };
+
+  const handleKinesiologoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setKinesiologo(event.target.value); // Asegúrate de que el valor sea un número
+  };
+
+  const handleFechaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFecha(event.target.value);
+  };
+
+  const handleHoraChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setHora(event.target.value);
+  };
+
+// Obtener la fecha de hoy en formato YYYY-MM-DD
+const today = new Date().toISOString().split('T')[0];
+
+const handleSubmit = async (event: React.FormEvent) => {
+  event.preventDefault();
+
+  if (!consultorio || !especialidad || !kinesiologo || !fecha || !hora) {
+    setMensaje('Por favor, complete todos los campos.');
+    return;
+  }
+
+  const turnoData = {
+    especialidadId: especialidad.id,
+    kinesiologoId: Number(kinesiologo),
+    fecha,
+    hora,
+  };
+
+  try {
+    const response = await fetch('/api/turnos/turnoNuevo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(turnoData),
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      setMensaje('Turno registrado exitosamente');
+    } else {
+      setMensaje(data.message || 'Error al registrar el turno');
+    }
+  } catch (error) {
+    console.error('Error al registrar el turno:', error);
+    setMensaje('Error al registrar el turno');
+  }
+};
 
   return (
-    <div className="container">
-      <h1>Crear Turno</h1>
-      <div className="form-group">
-        <label>Especialidad:</label>
-    <select
-      className="form-control"
-      value={selectedEspecialidad || ''}
-      onChange={(e) => {
-        const especialidadId = Number(e.target.value);
-         if (!isNaN(especialidadId)) {
-          setSelectedEspecialidad(especialidadId);
-         } else {
-          console.error('Error: El valor seleccionado no es un número válido');
-         }
-      }}
-    >
-   <option value="">Seleccione una especialidad</option>
-      {especialidades.map((especialidad) => (
-    <option key={especialidad.id} value={especialidad.id}>
-      {especialidad.nombre}
-    </option>
-  ))}
-    </select>
-      </div>
-      {selectedEspecialidad && (
-        <div className="form-group">
-          <label>Kinesiólogo:</label>
+    <div className="dashboard-nt">
+    <div className="container-nt">
+      <h2 className="dashboard-title-nt mb-3">Solicitar Turno</h2>
+      <form onSubmit={handleSubmit} className="form-background">
+        <div className="mb-3">
+          <label htmlFor="consultorio" className="form-label section-title">Consultorio</label>
           <select
-            className="form-control"
-            value={selectedKinesiologo || ''}
-            onChange={(e) => setSelectedKinesiologo(Number(e.target.value))}
+            id="consultorio"
+            className="form-select"
+            value={consultorio?.id || ''}
+            onChange={handleConsultorioChange}
           >
-            <option value="">Seleccione un kinesiólogo</option>
-            {kinesiologos.map((kine) => (
-              <option key={kine.id} value={kine.id}>
-                {kine.apellido}
+            <option value="">Seleccione un consultorio</option>
+            {consultorios.map((consultorio) => (
+              <option key={consultorio.id} value={consultorio.id}>
+                {consultorio.nombre} - {consultorio.domicilio}
               </option>
             ))}
           </select>
         </div>
-      )}
-      {selectedKinesiologo && (
-        <div className="form-group">
-          <label>Fecha:</label>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            filterDate={isWeekday}
-            dateFormat="dd/MM/yyyy"
+
+        <div className="mb-3">
+          <label htmlFor="especialidad" className="form-label section-title">Especialidad</label>
+          <select
+            id="especialidad"
+            className="form-select"
+            value={especialidad?.id || ''}
+            onChange={handleEspecialidadChange}
+            disabled={!consultorio}
+          >
+            <option value="">Seleccione una especialidad</option>
+            {especialidades.map((especialidad) => (
+              <option key={especialidad.id} value={especialidad.id}>
+                {especialidad.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="kinesiologo" className="form-label section-title">Kinesiólogo</label>
+          <select
+            id="kinesiologo"
+            className="form-select"
+            value={kinesiologo}
+            onChange={handleKinesiologoChange}
+            disabled={!especialidad || !consultorio}
+          >
+            <option value="">Seleccione un kinesiólogo</option>
+            {kinesiologos.map((kinesiologo) => (
+              <option key={kinesiologo.id} value={kinesiologo.id}>
+                Lic. {kinesiologo.nombre} {kinesiologo.apellido}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="fecha" className="form-label section-title">Fecha</label>
+          <input
+            type="date"
+            id="fecha"
             className="form-control"
+            value={fecha}
+            onChange={handleFechaChange}
+            disabled={!kinesiologo}
+            min={today}
           />
         </div>
-      )}
-  {selectedDate && availableHours.length > 0 && (
-    <div className="form-group">
-      <label>Horas disponibles:</label>
-      <select
-        className="form-control"
-        value={selectedHour || ''}
-       onChange={(e) => setSelectedHour(e.target.value)}
-     >
-       <option value="">Seleccione una hora</option>
-        {availableHours.map((hour) => (
-          <option key={hour} value={hour}>
-           {hour}
-         </option>
-        ))}
-      </select>
-   </div>
-  )}
-      <button className="btn btn-primary mt-3" onClick={handleConfirm}>
-        Confirmar Turno
-      </button>
+
+        <div className="mb-3">
+          <label htmlFor="hora" className="form-label section-title">Hora</label>
+          <select
+            id="hora"
+            className="form-select"
+            value={hora}
+            onChange={handleHoraChange}
+            disabled={!fecha}
+          >
+            <option value="">Seleccione una hora</option>
+            {disponibilidades?.horariosDisponibles?.map((horario) => (
+              <option key={horario} value={horario}>
+                {horario}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn-dark mt-4"
+          disabled={!consultorio || !especialidad || !kinesiologo || !fecha || !hora}
+        >
+          Enviar
+        </button>
+        {mensaje && <div className="mt-3">{mensaje}</div>}
+      </form>
     </div>
-  );
+  </div>
+);
 };
 
-export default CrearTurnoPaciente;
+export default TurnoForm;
