@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../estilos/login.css'
+import '../../estilos/login.css';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
 
@@ -10,9 +10,8 @@ const LoginSecretaria = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  const navigate = useNavigate(); // Hook para redirigir
 
+  const navigate = useNavigate();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -25,8 +24,7 @@ const LoginSecretaria = () => {
     if (!email) {
       setError('Debe ingresar su email');
       return;
-    }
-     else if (!password) {
+    } else if (!password) {
       setError('Debe ingresar su contraseña');
       return;
     }
@@ -34,17 +32,16 @@ const LoginSecretaria = () => {
       setError('El correo electrónico no es válido');
       return;
     }
-    setError(''); // Limpiar errores previos
+    setError('');
     setLoading(true);
 
     try {
-      // Llamada al backend para autenticar (con el puerto 3000)
       const response = await fetch('/api/secretarias/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',  // Incluir cookies en la solicitud
+        credentials: 'include', // Incluir cookies en la solicitud
         body: JSON.stringify({ email, password }),
       });
 
@@ -71,7 +68,6 @@ const LoginSecretaria = () => {
 
   return (
     <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
-  
       <div className="col-md-2">
         <h1 className="text-center mb-4">Iniciar sesión</h1>
         <Form onSubmit={handleLogin}>
@@ -110,9 +106,10 @@ const LoginSecretaria = () => {
                 />
                 Ingresando...
               </>
-            ) : ('Ingresar')}
+            ) : (
+              'Ingresar'
+            )}
           </Button>
-          
         </Form>
       </div>
     </section>
