@@ -209,11 +209,11 @@ const handleSubmit = async (event: React.FormEvent) => {
   }
 };
 
-  return (
-    <div className="dashboard-nt">
+return (
+  <div className="dashboard-nt">
     <div className="container-nt">
       <h2 className="dashboard-title-nt mb-3">Solicitar Turno</h2>
-      <form onSubmit={handleSubmit} className="form-background">
+      <div onSubmit={handleSubmit} className="form-background" role="form">
         <div className="mb-3">
           <label htmlFor="consultorio" className="form-label section-title">Consultorio</label>
           <select
@@ -299,14 +299,20 @@ const handleSubmit = async (event: React.FormEvent) => {
         </div>
 
         <button
-          type="submit"
+          type="button" 
           className="btn btn-dark mt-4"
+          onClick={handleSubmit} // Enlazamos el evento "onClick"
           disabled={!consultorio || !especialidad || !kinesiologo || !fecha || !hora}
         >
           Enviar
         </button>
-        {mensaje && <div className="mt-3">{mensaje}</div>}
-      </form>
+
+        {mensaje && (
+          <div className={`mt-3 ${mensaje.includes('exitosamente') ? 'message-success' : 'message-error'}`}>
+            {mensaje}
+          </div>
+        )}
+      </div>
     </div>
   </div>
 );

@@ -5,9 +5,12 @@
     padding: 20px;
     margin: 0 auto; /* Centra horizontalmente */
     max-width: 450px; /* Ajusta el ancho según lo que prefieras */
-    margin-top: -140px;
-    
-}
+    margin-top: -90px; /* Ajusta el margen superior según tus necesidades */
+    max-height: 700px;
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 20px; /* Deja espacio suficiente para el mensaje */
+  }
 
 .dashboard-nt {
     background-color: #f0f2f5;
@@ -24,9 +27,12 @@ button.btn-dark:hover {
 }
 
 .form-background {
-    background-color: #ffffff; /* Color sólido */
+    background-color: #ffffff;
     padding: 40px;
+    padding-bottom: 20px; /* Ajusta el padding inferior */
     border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
 .btn-dark {
@@ -38,4 +44,32 @@ button.btn-dark:hover {
 .dashboard-title-nt {
     text-align: center; /* Centra el texto */
     margin-bottom: 1rem; /* Ajusta el margen inferior si es necesario */
+}
+
+
+/* Estilo base para los mensajes */
+.message-success, .message-error {
+    padding: 10px 15px;  /* Mantengo el padding común para ambos */
+    border-radius: 5px;
+    margin-top: 20px; /* Asegura que el mensaje esté por debajo del formulario */
+    font-weight: bold;
+    max-width: 400px; /* Establecemos un ancho máximo */
+    width: 100%; /* Aseguramos que el ancho no supere el contenedor */
+    text-align: center; /* Centra el texto dentro del mensaje */
+    margin-left: auto;  /* Centra el mensaje horizontalmente */
+    margin-right: auto; /* Centra el mensaje horizontalmente */
+}
+
+/* Mensaje de error */
+.message-error {
+    background-color: #f8d7da; /* Fondo rojo claro */
+    color: #721c24; /* Color de texto rojo oscuro */
+    border: 1px solid #f5c6cb; /* Borde rojo claro */
+}
+
+/* Mensaje de éxito */
+.message-success {
+    background-color: #d4edda; /* Fondo verde claro */
+    color: #155724; /* Color de texto verde oscuro */
+    border: 1px solid #c3e6cb; /* Borde verde claro */
 }

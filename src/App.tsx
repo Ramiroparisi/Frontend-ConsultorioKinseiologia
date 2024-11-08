@@ -123,7 +123,7 @@ const App = () => {
           path="/turnoNuevoPaciente"
           element={
             <>
-              <Header />
+              <DashboardHeader />
               <CrearTurnoPaciente />
             </>
           }
