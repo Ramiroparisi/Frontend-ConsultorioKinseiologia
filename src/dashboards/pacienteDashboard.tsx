@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../estilos/pacienteDash.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import '../estilos/pacienteDash.css';
 
 interface Paciente {
   nombre: string;
@@ -30,6 +30,10 @@ const PacienteDashboard: React.FC = () => {
   const [turnosRealizados, setTurnosRealizados] = useState<Turno[]>([]);
   const [paciente, setPaciente] = useState<Paciente | null>(null);
   const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
 
   useEffect(() => {
     const obtenerDatosPaciente = async () => {
@@ -112,7 +116,10 @@ const PacienteDashboard: React.FC = () => {
             </div>
           ))}
 
-          <button className="btn btn-dark w-100 mt-3">
+          <button
+            className="btn btn-dark w-100 mt-3"
+            onClick={() => handleNavigation('/turnoNuevoPaciente')}
+          >
             Solicitar Nuevo Turno
           </button>
         </div>

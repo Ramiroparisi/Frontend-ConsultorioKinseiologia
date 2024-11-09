@@ -1,0 +1,75 @@
+.container-nt {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 0 auto; /* Centra horizontalmente */
+    max-width: 450px; /* Ajusta el ancho según lo que prefieras */
+    margin-top: -90px; /* Ajusta el margen superior según tus necesidades */
+    max-height: 700px;
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 20px; /* Deja espacio suficiente para el mensaje */
+  }
+
+.dashboard-nt {
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centra verticalmente */
+}
+
+button.btn-dark:hover {
+    background-color: #1f2937;
+    border-color: #1f2937;
+}
+
+.form-background {
+    background-color: #ffffff;
+    padding: 40px;
+    padding-bottom: 20px; /* Ajusta el padding inferior */
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+.btn-dark {
+    display: block; /* Hace que el botón ocupe el ancho completo del contenedor */
+    margin: 0 auto;
+    
+}
+
+.dashboard-title-nt {
+    text-align: center; /* Centra el texto */
+    margin-bottom: 1rem; /* Ajusta el margen inferior si es necesario */
+}
+
+
+/* Estilo base para los mensajes */
+.message-success, .message-error {
+    padding: 10px 15px;  /* Mantengo el padding común para ambos */
+    border-radius: 5px;
+    margin-top: 20px; 
+    font-weight: bold;
+    max-width: 400px; /* Establecemos un ancho máximo */
+    width: 100%; /* ancho no supere el contenedor */
+    text-align: center; /* Centra el texto dentro del mensaje */
+    margin-left: auto;  
+    margin-right: auto; 
+}
+
+/* Mensaje de error */
+.message-error {
+    background-color: #f8d7da; 
+    color: #721c24;  
+    border: 1px solid #f5c6cb; 
+}
+
+/* Mensaje de éxito */
+.message-success {
+    background-color: #d4edda; 
+    color: #155724; 
+    border: 1px solid #c3e6cb; 
+}
