@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../estilos/datosKine.css';
+import '../../estilos/perfilKine.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -10,7 +10,7 @@ interface Kinesiologo {
   apellido: string;
   dni: number;
   email: string;
-  telefono: string;
+  telefono: number;
   especialidad: Especialidad;
 }
 
@@ -70,7 +70,7 @@ const DatosKine: React.FC = () => {
   const handleSave = async () => {
     if (!kinesiologo) return;
 
-    // Solo incluir los campos necesarios
+  
     const dataToUpdate = {
       nombre: editedData?.nombre,
       apellido: editedData?.apellido,

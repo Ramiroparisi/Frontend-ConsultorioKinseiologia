@@ -33,7 +33,7 @@ const DashboardHeader: React.FC = () => {
                 <i className="bi bi-person"></i>
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a className="dropdown-item" href="#">Mis Datos</a></li>
+            <li><a className="dropdown-item"  onClick={()=> handleNavigation ('/datosPaciente')}>Mis Datos</a></li>
             <li><hr className="dropdown-divider" /></li>
             <li><a className="dropdown-item cerrar-sesion" href="#" onClick={handleLogout}>Cerrar Sesion</a></li>
             </ul>

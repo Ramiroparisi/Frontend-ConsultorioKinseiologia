@@ -33,7 +33,10 @@ import RegistroDisponibilidad from './componentes/register/registrarDispo.tsx';
 
 // Turnos
 import CrearTurnoPaciente from './componentes/crearTurnos/turnoNuevoPaciente.tsx';
-import DatosKine from '../src/componentes/datos/datosKine.tsx';
+
+// Perfiles
+import DatosKine from './componentes/perfiles/perfilKine.tsx';
+import DatosPaciente from './componentes/perfiles/perfilPaciente.tsx';
 
 const App = () => {
   return (
@@ -163,6 +166,15 @@ const App = () => {
             <>
               <DashboardHeaderKine />
               <DatosKine />
+            </>
+          }
+        />
+                <Route
+          path="/datosPaciente"
+          element={
+            <>
+              <DashboardHeader />
+              <DatosPaciente />
             </>
           }
         />

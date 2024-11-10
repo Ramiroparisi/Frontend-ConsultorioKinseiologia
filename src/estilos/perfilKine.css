@@ -1,7 +1,6 @@
 .datos-kine-container {
   background-color: #ffffff;
-  padding: 20px;
-  padding-left: 100px;
+  padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 600px;
@@ -9,7 +8,8 @@
   margin-top: 40px;
 }
 .formulario{
-  padding-left: 20px;
+  padding-left: 28px;
+  padding-top: 20px;
 }
 
 h2 {
@@ -23,23 +23,26 @@ h2 {
   color: #555555;
 }
 
+.formularioN {
+  border-radius: 4px;
+  box-shadow: none;
+  border: 1px solid #ced4da;
+  width: 458px;
+  padding: 10px;
+}
+
 .formularioC {
   border-radius: 4px;
   box-shadow: none;
   border: 1px solid #ced4da;
 }
 
-.formularioN {
-  border-radius: 4px;
-  box-shadow: none;
-  border: 1px solid #ced4da;
-  width: 348px;
-  padding: 6px;
-}
+
 
 
 button {
   min-width: 100px;
+  margin-top: 10px;
 }
 
 .guardar {
