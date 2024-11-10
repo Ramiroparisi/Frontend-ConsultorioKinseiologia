@@ -1,4 +1,3 @@
-/*La unidad rem es en cuanto al tamaño de la fuente raiz donde lo estoy aplicando*/
 section {
   display: flex;
   height: 100vh;
@@ -29,9 +28,9 @@ label {
   font-weight: bold;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+input[type='text'],
+input[type='email'],
+input[type='password'] {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -45,25 +44,22 @@ input[type="password"] {
   text-align: center;
 }
 
-.btn-custom{
+.btn-custom {
   background-color: #ccc;
   border-color: black;
-
 }
 
-.btn-custom:hover{
+.btn-custom:hover {
   background-color: black;
   border-color: black;
 }
 
-.btn-custom2{
+.btn-custom2 {
   background-color: #d63333;
   border-color: black;
-
 }
 
-.btn-custom2:hover{
+.btn-custom2:hover {
   background-color: black;
   border-color: black;
 }
-

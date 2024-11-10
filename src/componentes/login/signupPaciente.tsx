@@ -79,13 +79,12 @@ const SignUpPaciente = () => {
     setLoading(true);
 
     try {
-      // Llamada al backend para autenticar (con el puerto 3000)
       const response = await fetch('/api/pacientes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',  // Incluir cookies en la solicitud
+        credentials: 'include',  
         body: JSON.stringify({ nombre, apellido, dni, fechaNacimiento, email, telefono, password, obraSocial}),
       });
 
@@ -97,10 +96,10 @@ const SignUpPaciente = () => {
         return;
       }
 
-      // Guardar el token JWT en cookies
+      
       Cookies.set('token', data.token, { expires: 1 }); // Guardar el token por 1 día
 
-      // Redirigir al dashboard del paciente
+      
       handleNavigation('/pacienteDashboard');
     } catch (error) {
       console.error('Error en el login:', error);

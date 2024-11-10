@@ -1,0 +1,98 @@
+/* Asegura que el formulario siempre se mantenga centrado */
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+}
+
+form {
+  width: 100%;
+  max-width: 450px; /* Ajuste el tamaño del formulario */
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form div {
+  margin-bottom: 1.5rem; /* Aumentar el margen entre campos */
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333; /* Cambiar color del label a un tono más oscuro */
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'],
+select {
+  width: 100%;
+  padding: 0.75rem; /* Un poco más de espacio dentro del input */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border 0.3s ease; /* Efecto de transición suave para el borde */
+}
+
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+select:focus {
+  border: 1px solid #007bff; /* Borde azul en foco */
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.btn-custom {
+  background-color: #007bff; /* Botón de color azul */
+  border-color: #007bff;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%; /* Hacer que el botón ocupe todo el ancho disponible */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Transición suave para el hover */
+}
+
+.btn-custom:hover {
+  background-color: #0056b3; /* Color azul más oscuro en hover */
+  border-color: #0056b3;
+}
+
+.btn-custom2 {
+  background-color: #d63333; /* Rojo para el botón de cancelar */
+  border-color: #d63333;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-custom2:hover {
+  background-color: #c82333; /* Rojo más oscuro en hover */
+  border-color: #c82333;
+}
+
+@media (max-width: 576px) {
+  form {
+    padding: 1rem; /* Reducir el padding en pantallas pequeñas */
+  }
+  .btn-custom,
+  .btn-custom2 {
+    width: 100%; /* Asegurar que los botones se ajusten en pantallas pequeñas */
+  }
+}
