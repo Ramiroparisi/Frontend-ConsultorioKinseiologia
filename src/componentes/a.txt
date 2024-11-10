@@ -1,1 +1,358 @@
 En el archivo css de login de secretaria Explico que hace cada propiedad
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import '../estilos/secretariaDash.css';
+
+interface Kinesiologo {
+  id: number;
+  nombre: string;
+  apellido: string;
+  especialidad: string;
+}
+
+interface Turno {
+  id: number;
+  fecha: Date;
+  hora: string;
+  paciente: { nombre: string; apellido: string };
+  kinesiologo: { apellido: string };
+}
+
+interface Disponibilidad {
+  id: number;
+  fechaDesde: Date;
+  diaSemana: string;
+  horaInicio: string;
+  horaFin: string;
+  kinesiologo: Kinesiologo;
+}
+
+const SecretariaDashboard: React.FC = () => {
+  const [kinesiologos, setKinesiologos] = useState<Kinesiologo[]>([]);
+  const [disponibilidades, setDisponibilidades] = useState<Disponibilidad[]>(
+    []
+  );
+  const [turnos, setTurnos] = useState<Turno[]>([]);
+  const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [especialidades, setEspecialidades] = useState<string[]>([]);
+  const [filtroEspecialidad, setFiltroEspecialidad] = useState<string>('');
+  const [filtroKinesiologo, setFiltroKinesiologo] = useState<number | ''>('');
+  const [consultorioId, setConsultorioId] = useState<number | null>(null);
+  const navigate = useNavigate();
+
+  // Obtener datos de la secretaria (consultorioId)
+  useEffect(() => {
+    const fetchSecretariaData = async () => {
+      const response = await fetch('/api/secretaria', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setConsultorioId(data.consultorioId); // Suponemos que esta información viene en la respuesta
+    };
+
+    fetchSecretariaData();
+  }, []);
+
+  useEffect(() => {
+    const obtenerKinesiologos = async () => {
+      const response = await fetch('/api/kinesiologos', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setKinesiologos(data);
+    };
+
+    const obtenerDisponibilidades = async () => {
+      const response = await fetch('/api/disponibilidades', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setDisponibilidades(data);
+    };
+
+    const obtenerTurnos = async () => {
+      const response = await fetch('/api/turnos', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setTurnos(data);
+    };
+
+    const obtenerEspecialidades = async () => {
+      const response = await fetch('/api/especialidades', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setEspecialidades(data);
+    };
+
+    obtenerKinesiologos();
+    obtenerDisponibilidades();
+    obtenerTurnos();
+    obtenerEspecialidades();
+  }, []);
+
+  useEffect(() => {
+    const ahora = new Date();
+
+    const pendientes = turnos.filter((turno) => {
+      const fechaTurno = new Date(turno.fecha);
+      const [hora, minutos] = turno.hora.split(':').map(Number);
+      fechaTurno.setHours(hora, minutos, 0, 0);
+
+      return (
+        fechaTurno.getTime() > ahora.getTime() &&
+        fechaTurno.toDateString() === selectedDate?.toDateString()
+      );
+    });
+
+    pendientes.sort(
+      (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
+    );
+
+    setTurnosPendientes(pendientes);
+  }, [turnos, selectedDate]);
+
+  const eliminarKinesiologo = async (id: number) => {
+    if (
+      window.confirm(
+        '¿Estás seguro de que deseas dar de baja a este kinesiólogo?'
+      )
+    ) {
+      await fetch(`/api/kinesiologos/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      setKinesiologos((prev) => prev.filter((k) => k.id !== id));
+    }
+  };
+
+  const eliminarDisponibilidad = async (id: number) => {
+    if (
+      window.confirm(
+        '¿Estás seguro de que deseas eliminar esta disponibilidad?'
+      )
+    ) {
+      await fetch(`/api/disponibilidades/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      setDisponibilidades((prev) => prev.filter((d) => d.id !== id));
+    }
+  };
+
+  const handleDeleteTurno = async (turnoId: number) => {
+    if (window.confirm('¿Desea eliminar el turno?')) {
+      await fetch(`/api/turnos/${turnoId}`, { method: 'DELETE' });
+      setTurnos((prev) => prev.filter((turno) => turno.id !== turnoId));
+      setTurnosPendientes((prev) =>
+        prev.filter((turno) => turno.id !== turnoId)
+      );
+    }
+  };
+
+  const handleMarkAsCompleted = (turnoId: number) => {
+    alert(`El turno ${turnoId} ha sido marcado como realizado`);
+  };
+
+  const handleFiltroEspecialidad = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFiltroEspecialidad(e.target.value);
+  };
+
+  const handleFiltroKinesiologo = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFiltroKinesiologo(e.target.value ? Number(e.target.value) : '');
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  const kinesiologosFiltrados = filtroEspecialidad
+    ? kinesiologos.filter((k) => k.especialidad === filtroEspecialidad)
+    : kinesiologos;
+
+  const disponibilidadesFiltradas = filtroKinesiologo
+    ? disponibilidades.filter((d) => d.kinesiologo.id === filtroKinesiologo)
+    : disponibilidades;
+
+  const handleRegistroDisponibilidad = () => {
+    if (!filtroKinesiologo) {
+      alert('Debe seleccionar un kinesiólogo');
+      return;
+    }
+
+    // Aseguramos que el kinesiologo seleccionado está filtrado y lo pasamos al registro
+    const kinesiologoSeleccionado = kinesiologos.find(
+      (k) => k.id === filtroKinesiologo
+    );
+
+    if (kinesiologoSeleccionado && consultorioId) {
+      navigate('/registroDisponibilidad', {
+        state: { kinesiologoId: filtroKinesiologo, consultorioId },
+      });
+    } else {
+      alert('No se encontró el kinesiologo o no se ha asignado un consultorio');
+    }
+  };
+
+  return (
+    <div className="dashboard">
+      <div className="container pt-4 pb-4">
+        <h1 className="dashboard-title">Dashboard de Secretaria</h1>
+
+        {/* Sección de Manejo de Kinesiólogos */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-person-circle"></i>
+            <h2 className="section-title">Kinesiologos</h2>
+          </div>
+
+          {/* Filtro por especialidad */}
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <select
+              className="form-select w-50"
+              value={filtroEspecialidad}
+              onChange={handleFiltroEspecialidad}
+            >
+              <option value="">Todas las Especialidades</option>
+              {especialidades.map((especialidad, index) => (
+                <option key={index} value={especialidad}>
+                  {especialidad}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Listado de Kinesiologos */}
+          <ul className="list-group">
+            {kinesiologosFiltrados.map((kinesiologo) => (
+              <li
+                key={kinesiologo.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {kinesiologo.nombre} {kinesiologo.apellido} -{' '}
+                {kinesiologo.especialidad}
+                <button
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => eliminarKinesiologo(kinesiologo.id)}
+                >
+                  Dar de Baja
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* Botón Agregar Kinesiologo */}
+          <div className="text-center mt-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => handleNavigation('/registroKinesiologo')}
+            >
+              Agregar Kinesiologo
+            </button>
+          </div>
+        </div>
+
+        {/* Sección de Manejo de Disponibilidades */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-calendar-check"></i>
+            <h2 className="section-title">Disponibilidades</h2>
+          </div>
+
+          {/* Filtro por Kinesiólogo */}
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <select
+              className="form-select w-50"
+              value={filtroKinesiologo}
+              onChange={handleFiltroKinesiologo}
+            >
+              <option value="">Todos los Kinesiologos</option>
+              {kinesiologos.map((kinesiologo) => (
+                <option key={kinesiologo.id} value={kinesiologo.id}>
+                  {kinesiologo.nombre} {kinesiologo.apellido}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Listado de Disponibilidades */}
+          <ul className="list-group">
+            {disponibilidadesFiltradas.map((disponibilidad) => (
+              <li
+                key={disponibilidad.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {disponibilidad.kinesiologo.nombre}{' '}
+                {disponibilidad.kinesiologo.apellido} |{' '}
+                {disponibilidad.diaSemana} {disponibilidad.horaInicio} -{' '}
+                {disponibilidad.horaFin}
+                <button
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => eliminarDisponibilidad(disponibilidad.id)}
+                >
+                  Eliminar
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* Botón Agregar Disponibilidad */}
+          <div className="text-center mt-3">
+            <button
+              className="btn btn-primary"
+              onClick={handleRegistroDisponibilidad}
+            >
+              Agregar Disponibilidad
+            </button>
+          </div>
+        </div>
+
+        {/* Sección de Turnos Pendientes */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-calendar-check"></i>
+            <h2 className="section-title">Turnos Pendientes</h2>
+          </div>
+          <ul className="list-group">
+            {turnosPendientes.map((turno) => (
+              <li
+                key={turno.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {turno.paciente.nombre} {turno.paciente.apellido} | {turno.hora}{' '}
+                {turno.kinesiologo.apellido}
+                <div>
+                  <button
+                    className="btn btn-outline-success btn-sm me-2"
+                    onClick={() => handleMarkAsCompleted(turno.id)}
+                  >
+                    Realizado
+                  </button>
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => handleDeleteTurno(turno.id)}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SecretariaDashboard;

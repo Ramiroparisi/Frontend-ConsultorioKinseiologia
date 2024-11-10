@@ -1,220 +1,208 @@
 import { useState, useEffect } from 'react';
-import '../estilos/pacienteDash.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import '../estilos/secretariaDash.css';
 
-interface Turno {
+interface Kinesiologo {
   id: number;
-  fecha: Date;
-  hora: string;
-  paciente: { nombre: string; apellido: string };
-  kinesiologo: { apellido: string };
+  nombre: string;
+  apellido: string;
+  especialidad: { id: number; nombre: string };
 }
 
-const SecretariaDashboard = () => {
+interface Especialidad {
+  id: number;
+  nombre: string;
+  estado: boolean;
+}
+
+function SecretariaDashboard() {
+  const [especialidad, setEspecialidad] = useState<Especialidad | null>(null);
+  const [especialidades, setEspecialidades] = useState<Especialidad[]>([]);
+  const [kinesiologos, setKinesiologos] = useState<Kinesiologo[]>([]);
   const [turnos, setTurnos] = useState<Turno[]>([]);
   const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
-  const [turnosRealizados, setTurnosRealizados] = useState<Turno[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [showRealizados, setShowRealizados] = useState(true);
+  const [filtroEspecialidad, setFiltroEspecialidad] = useState<string>('');
+  const [filtroKinesiologo, setFiltroKinesiologo] = useState<number | ''>('');
+  const [consultorioId, setConsultorioId] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const obtenerTurnos = async () => {
-      try {
-        const response = await fetch('/api/turnos');
-        if (!response.ok) throw new Error('Error en la respuesta de la API');
-        const data = await response.json();
-
-        if (!Array.isArray(data.data)) {
-          throw new Error(
-            'La respuesta de la API no contiene un array en la propiedad "data"'
-          );
-        }
-        setTurnos(data.data);
-      } catch (error) {
-        console.error('Error al obtener los turnos:', error);
+  // Función para obtener las especialidades activas
+  const fetchEspecialidades = async () => {
+    try {
+      const response = await fetch('/api/especialidades', {
+        method: 'GET',
+        credentials: 'include', // Incluir cookies si son necesarias
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener las especialidades');
       }
-    };
-
-    obtenerTurnos();
-  }, []);
-
-  useEffect(() => {
-    if (!selectedDate) return;
-    const ahora = new Date();
-
-    const pendientes = turnos.filter((turno) => {
-      const fechaTurno = new Date(turno.fecha);
-      const [hora, minutos] = turno.hora.split(':').map(Number);
-      fechaTurno.setHours(hora, minutos, 0, 0);
-
-      return (
-        fechaTurno.getTime() > ahora.getTime() &&
-        fechaTurno.toDateString() === selectedDate.toDateString()
+      const data = await response.json();
+      // Filtrar solo las especialidades activas (estado: true)
+      setEspecialidades(
+        data.data.filter((especialidad: Especialidad) => especialidad.estado)
       );
-    });
-
-    const realizados = turnos.filter((turno) => {
-      const fechaTurno = new Date(turno.fecha);
-      const [hora, minutos] = turno.hora.split(':').map(Number);
-      fechaTurno.setHours(hora, minutos, 0, 0);
-
-      return (
-        fechaTurno.getTime() <= ahora.getTime() &&
-        fechaTurno.toDateString() === selectedDate.toDateString()
-      );
-    });
-
-    pendientes.sort(
-      (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
-    );
-    realizados.sort(
-      (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
-    );
-
-    setTurnosPendientes(pendientes);
-    setTurnosRealizados(realizados);
-  }, [turnos, selectedDate]);
-
-  const handleNavigation = (path: string) => {
-    navigate(path);
+    } catch (error) {
+      console.error('Error al obtener las especialidades:', error);
+    }
   };
 
-  const handleDelete = async (turnoId: number) => {
-    if (window.confirm('¿Desea eliminar el turno?')) {
-      try {
-        const response = await fetch(`/api/turnos/${turnoId}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Error al eliminar el turno');
-
-        setTurnos((prev) => prev.filter((turno) => turno.id !== turnoId));
-        setTurnosPendientes((prev) =>
-          prev.filter((turno) => turno.id !== turnoId)
-        );
-        setTurnosRealizados((prev) =>
-          prev.filter((turno) => turno.id !== turnoId)
-        );
-      } catch (error) {
-        console.error('Error al eliminar el turno:', error);
-      }
+  // Este lo hago para obtener los kinesiólogos según la especialidad seleccionada
+  const fetchKinesiologos = async (especialidadId: number) => {
+    try {
+      const response = await fetch(`/api/kinesiologos/${especialidadId}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Error al obtener los kinesiólogos');
+      const data = await response.json();
+      setKinesiologos(data.data);
+    } catch (error) {
+      console.error('Error al obtener los kinesiólogos:', error);
     }
+  };
+
+  // Este lo hago para obtener todos los kinesiólogos de este consultorio
+  const fetchTodosLosKinesiologos = async () => {
+    try {
+      const response = await fetch('/api/kinesiologos/consul', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Error al obtener los kinesiólogos');
+      const data = await response.json();
+      setKinesiologos(data.data);
+    } catch (error) {
+      console.error('Error al obtener los kinesiólogos:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEspecialidades();
+  }, []);
+
+  // Efecto que se ejecuta cuando se selecciona una especialidad
+  useEffect(() => {
+    if (especialidad) {
+      fetchKinesiologos(especialidad.id);
+    } else {
+      fetchTodosLosKinesiologos();
+    }
+  }, [especialidad]);
+
+  // Función para manejar el cambio de especialidad
+  const handleEspecialidadChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedEspecialidadId = event.target.value
+      ? parseInt(event.target.value)
+      : null;
+    const selectedEspecialidad = especialidades.find(
+      (esp) => esp.id === selectedEspecialidadId
+    );
+    setEspecialidad(selectedEspecialidad || null);
+  };
+
+  // Función general para eliminar un ítem
+  const handleRemoveItem = async (id: number) => {
+    try {
+      // Mostrar la ventana de confirmación
+      const confirmar = window.confirm(
+        '¿Está seguro de que desea dar de baja al kinesiologo?'
+      );
+
+      if (confirmar) {
+        // Hacer una solicitud DELETE al backend
+        const response = await fetch(`/api/kinesiologos/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          // Si tiene turnos activos, mostrar el mensaje de error
+          alert(errorData.message); // Muestra el mensaje del backend al usuario
+        } else {
+          // Si se eliminó correctamente
+          alert('Kinesiologo eliminado con éxito.');
+          // Aquí puedes actualizar la lista de kinesiologos en el frontend
+        }
+      } else {
+        console.log('El usuario canceló la eliminación del kinesiologo.');
+      }
+    } catch (error) {
+      console.error('Error al intentar eliminar el kinesiologo:', error);
+    }
+  };
+
+  // Función para manejar la navegación
+  const handleNavigation = (path: string) => {
+    navigate(path);
   };
 
   return (
     <div className="dashboard">
       <div className="container pt-4 pb-4">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="dashboard-title">
-            Bienvenido/a (nombre de la secretaria)
-          </h1>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="dd/MM/yyyy"
-            className="form-control"
-          />
-        </div>
+        <h1 className="dashboard-title">Dashboard de Secretaria</h1>
 
         <div className="dashboard-card mb-4">
           <div className="d-flex align-items-center gap-2 mb-3">
-            <span className="check-icon">
-              <i className="bi bi-check-lg"></i>
-            </span>
-            <h2 className="section-title text-color mb-0">Turnos Realizados</h2>
-            <button
-              className="btn btn-link text-primary"
-              onClick={() => setShowRealizados(!showRealizados)}
+            <i className="bi bi-person-circle"></i>
+            <h2 className="section-title">Kinesiologos</h2>
+          </div>
+
+          {/* Filtro por especialidad */}
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <select
+              className="form-select w-50"
+              value={especialidad?.id || ''}
+              onChange={handleEspecialidadChange}
             >
-              {showRealizados ? 'Ocultar' : 'Mostrar'}
-            </button>
+              <option value="">Todas las Especialidades</option>
+              {especialidades.length > 0 ? (
+                especialidades.map((esp) => (
+                  <option key={esp.id} value={esp.id}>
+                    {esp.nombre}
+                  </option>
+                ))
+              ) : (
+                <option>No hay especialidades disponibles</option>
+              )}
+            </select>
           </div>
 
-          {showRealizados &&
-            (turnosRealizados.length > 0 ? (
-              turnosRealizados.map((turno) => (
-                <div key={turno.id} className="appointment-row">
-                  <div className="d-flex align-items-center">
-                    <span className="appointment-icon me-2">
-                      <i className="bi bi-calendar"></i>
-                    </span>
-                    <span className="me-2">
-                      {new Date(turno.fecha).toLocaleDateString()}
-                    </span>
-                    <span className="appointment-icon me-2">
-                      <i className="bi bi-clock"></i>
-                    </span>
-                    <span className="me-2">{turno.hora}</span>
-                    <span className="text-secondary">
-                      - lic {turno.kinesiologo.apellido} - pac{' '}
-                      {turno.paciente.nombre} {turno.paciente.apellido}
-                    </span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No hay turnos realizados para esta fecha.</p>
-            ))}
-        </div>
-
-        <div className="dashboard-card">
-          <div className="d-flex align-items-center gap-2 mb-3">
-            <span className="pending-icon">
-              <i className="bi bi-clock-history"></i>
-            </span>
-            <h2 className="section-title text-color mb-0">Turnos Pendientes</h2>
-          </div>
-
-          {turnosPendientes.length > 0 ? (
-            turnosPendientes.map((turno) => (
-              <div
-                key={turno.id}
-                className="appointment-row d-flex justify-content-between align-items-center"
+          {/* Listado de Kinesiologos */}
+          <ul className="list-group">
+            {kinesiologos.map((kinesiologo) => (
+              <li
+                key={kinesiologo.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
               >
-                <div className="d-flex align-items-center">
-                  <span className="appointment-icon me-2">
-                    <i className="bi bi-calendar"></i>
-                  </span>
-                  <span className="me-2">
-                    {new Date(turno.fecha).toLocaleDateString()}
-                  </span>
-                  <span className="appointment-icon me-2">
-                    <i className="bi bi-clock"></i>
-                  </span>
-                  <span className="me-2">{turno.hora}</span>
-                  <span className="text-secondary">
-                    - lic {turno.kinesiologo.apellido} - pac{' '}
-                    {turno.paciente.nombre} {turno.paciente.apellido}
-                  </span>
-                </div>
+                {kinesiologo.nombre} {kinesiologo.apellido} -{' '}
+                {kinesiologo.especialidad.nombre}
                 <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleDelete(turno.id)}
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => handleRemoveItem(kinesiologo.id)}
                 >
-                  <i className="bi bi-trash"></i>
+                  Dar de Baja
                 </button>
-              </div>
-            ))
-          ) : (
-            <p>No hay turnos pendientes.</p>
-          )}
-
-          <div className="d-flex justify-content-center mt-4">
+              </li>
+            ))}
+          </ul>
+          {/* Botón Agregar Kinesiologo */}
+          <div className="text-center mt-3">
             <button
-              type="button"
-              className="btn btn-dark"
-              onClick={() => handleNavigation('/turnoNuevoSecretaria')}
+              className="btn btn-primary"
+              onClick={() => handleNavigation('/registroKinesiologo')}
             >
-              Solicitar nuevo turno
+              Agregar Kinesiologo
             </button>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default SecretariaDashboard;
