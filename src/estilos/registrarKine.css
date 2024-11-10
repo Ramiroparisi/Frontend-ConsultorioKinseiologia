@@ -9,7 +9,7 @@ section {
 
 form {
   width: 100%;
-  max-width: 450px; /* Ajuste el tamaño del formulario */
+  max-width: 600px; /* Ajuste el tamaño del formulario para pantallas más grandes */
   padding: 2rem;
   background-color: #fff;
   border-radius: 8px;
@@ -17,7 +17,7 @@ form {
 }
 
 form div {
-  margin-bottom: 1.5rem; /* Aumentar el margen entre campos */
+  margin-bottom: 1.5px; /* Aumentar el margen entre campos */
 }
 
 label {
@@ -53,16 +53,38 @@ select:focus {
   text-align: center;
 }
 
+.alert {
+  margin-bottom: 1.5rem; /* Espacio entre la alerta y el resto del formulario */
+  font-weight: bold;
+}
+
+.row {
+  margin-bottom: 1rem;
+}
+
+/* Ajuste de estilo de los botones */
+button {
+  transition: all 0.3s ease;
+}
+
+button:focus {
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Efecto de sombra azul cuando el botón está en foco */
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* Estilo personalizado para los botones de "Registrar" y "Cancelar" */
 .btn-custom {
-  background-color: #007bff; /* Botón de color azul */
+  background-color: #007bff;
   border-color: #007bff;
   color: white;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
-  width: 100%; /* Hacer que el botón ocupe todo el ancho disponible */
-  transition: background-color 0.3s ease, border-color 0.3s ease; /* Transición suave para el hover */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .btn-custom:hover {
@@ -78,7 +100,6 @@ select:focus {
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
-  width: 100%;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -91,6 +112,7 @@ select:focus {
   form {
     padding: 1rem; /* Reducir el padding en pantallas pequeñas */
   }
+
   .btn-custom,
   .btn-custom2 {
     width: 100%; /* Asegurar que los botones se ajusten en pantallas pequeñas */

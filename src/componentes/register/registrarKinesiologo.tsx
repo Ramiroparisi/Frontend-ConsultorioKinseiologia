@@ -1,7 +1,7 @@
-import '../../estilos/registrarKine.css';
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Container } from 'react-bootstrap';
+import { Button, Form, Container, Alert, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import '../../estilos/registrarKine.css';
 
 interface Especialidad {
   id: number;
@@ -16,11 +16,12 @@ const RegistroKinesiologo: React.FC = () => {
   const [telefono, setTelefono] = useState('');
   const [dni, setDni] = useState('');
   const [matricula, setMatricula] = useState('');
-  const [especialidad, setEspecialidad] = useState<number | ''>(''); // Cambiado a número o cadena vacía
+  const [especialidad, setEspecialidad] = useState<number | ''>('');
   const [consultorioId, setConsultorioId] = useState<number | null>(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [especialidades, setEspecialidades] = useState<Especialidad[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   // Obtener especialidades del backend
@@ -48,12 +49,25 @@ const RegistroKinesiologo: React.FC = () => {
   }, []);
 
   const handleRegistrarKinesiologo = async () => {
-    if (password !== confirmPassword) {
-      alert('Las contraseñas no coinciden.');
+    // Validación de campos vacíos
+    if (
+      !nombre ||
+      !apellido ||
+      !email ||
+      !telefono ||
+      !dni ||
+      !matricula ||
+      especialidad === '' ||
+      !password ||
+      !confirmPassword
+    ) {
+      setErrorMessage('Por favor, completa todos los campos.');
       return;
     }
-    if (especialidad === '') {
-      alert('Por favor, selecciona una especialidad.');
+
+    // Validación de contraseñas
+    if (password !== confirmPassword) {
+      setErrorMessage('Las contraseñas no coinciden.');
       return;
     }
 
@@ -91,79 +105,111 @@ const RegistroKinesiologo: React.FC = () => {
       className="d-flex flex-column justify-content-center align-items-center pt-4"
       style={{ minHeight: '100vh' }}
     >
-      <h2>Registro de Kinesiologo</h2>
-      <Form className="w-50 mx-auto">
-        <Form.Group controlId="nombre">
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control
-            type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="apellido" className="mt-3">
-          <Form.Label>Apellido</Form.Label>
-          <Form.Control
-            type="text"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="email" className="mt-3">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="telefono" className="mt-3">
-          <Form.Label>Teléfono</Form.Label>
-          <Form.Control
-            type="tel"
-            value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="dni" className="mt-3">
-          <Form.Label>DNI</Form.Label>
-          <Form.Control
-            type="text"
-            value={dni}
-            onChange={(e) => setDni(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="matricula" className="mt-3">
-          <Form.Label>Matrícula</Form.Label>
-          <Form.Control
-            type="text"
-            value={matricula}
-            onChange={(e) => setMatricula(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="especialidad" className="mt-3">
+      {/* Título de la página */}
+      <h1 className="text-center mb-4">Registro Kinesiologo</h1>
+
+      <Form className="w-100">
+        {/* Mostrar alerta de error si hay algún mensaje */}
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+
+        {/* Fila para los campos de nombre y apellido */}
+        <Row className="mb-3">
+          <Col xs={12} md={6}>
+            <Form.Group controlId="nombre">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                type="text"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="apellido">
+              <Form.Label>Apellido</Form.Label>
+              <Form.Control
+                type="text"
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Fila para los campos de email y teléfono */}
+        <Row className="mb-3">
+          <Col xs={12} md={6}>
+            <Form.Group controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="telefono">
+              <Form.Label>Teléfono</Form.Label>
+              <Form.Control
+                type="text"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Fila para los campos de DNI y matrícula */}
+        <Row className="mb-3">
+          <Col xs={12} md={6}>
+            <Form.Group controlId="dni">
+              <Form.Label>DNI</Form.Label>
+              <Form.Control
+                type="text"
+                value={dni}
+                onChange={(e) => setDni(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col xs={12} md={6}>
+            <Form.Group controlId="matricula">
+              <Form.Label>Matricula</Form.Label>
+              <Form.Control
+                type="text"
+                value={matricula}
+                onChange={(e) => setMatricula(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Campo de especialidad */}
+        <Form.Group controlId="especialidad" className="mb-3">
           <Form.Label>Especialidad</Form.Label>
           <Form.Control
             as="select"
             value={especialidad}
-            onChange={(e) => setEspecialidad(Number(e.target.value) || '')}
+            onChange={(e) => setEspecialidad(Number(e.target.value))}
             required
           >
-            <option value="">Selecciona una especialidad</option>
-            {especialidades.map((opcion) => (
-              <option key={opcion.id} value={opcion.id}>
-                {opcion.nombre}
+            <option value="">Seleccione...</option>
+            {especialidades.map((especialidad) => (
+              <option key={especialidad.id} value={especialidad.id}>
+                {especialidad.nombre}
               </option>
             ))}
           </Form.Control>
         </Form.Group>
-        <Form.Group controlId="password" className="mt-3">
+
+        {/* Campo de contraseña */}
+        <Form.Group controlId="password" className="mb-3">
           <Form.Label>Contraseña</Form.Label>
           <Form.Control
             type="password"
@@ -172,7 +218,9 @@ const RegistroKinesiologo: React.FC = () => {
             required
           />
         </Form.Group>
-        <Form.Group controlId="confirmPassword" className="mt-3">
+
+        {/* Campo de confirmación de contraseña */}
+        <Form.Group controlId="confirmPassword" className="mb-3">
           <Form.Label>Confirmar Contraseña</Form.Label>
           <Form.Control
             type="password"
@@ -181,16 +229,31 @@ const RegistroKinesiologo: React.FC = () => {
             required
           />
         </Form.Group>
-        <Button
-          variant="primary"
-          type="button"
-          className="mt-3"
-          onClick={handleRegistrarKinesiologo}
-        >
-          Registrar Kinesiologo
-        </Button>
+
+        {/* Fila para los botones de "Registrar" y "Cancelar" */}
+        <Row className="mb-3">
+          <Col xs={6} className="d-flex justify-content-end">
+            <Button
+              variant="primary"
+              className="w-100"
+              onClick={handleRegistrarKinesiologo}
+            >
+              Registrar
+            </Button>
+          </Col>
+          <Col xs={6} className="d-flex justify-content-start">
+            <Button
+              variant="danger"
+              className="w-100"
+              onClick={() => navigate('/secretariaDashboard')}
+            >
+              Volver
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Container>
   );
 };
+
 export default RegistroKinesiologo;
