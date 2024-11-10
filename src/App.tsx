@@ -17,6 +17,7 @@ import Contacto from './componentes/header/contacto.tsx';
 import CrearTurnoPaciente from './componentes/crearTurnos/turnoNuevoPaciente.tsx';
 import DashboardHeader from './componentes/header/dashboardHeader.tsx';
 import DashboardHeaderKine from './componentes/header/dashboardHeaderKine.tsx';
+import DatosKine from '../src/componentes/datos/datosKine.tsx';
 
 const App = () => {
   return (
@@ -125,6 +126,16 @@ const App = () => {
             <>
               <DashboardHeader />
               <CrearTurnoPaciente />
+            </>
+          }
+        />
+        {/* Rutas para los datos de kinesiologo */}
+        <Route
+          path="/datosKine"
+          element={
+            <>
+              <DashboardHeaderKine />
+              <DatosKine />
             </>
           }
         />

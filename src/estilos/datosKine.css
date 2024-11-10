@@ -1,0 +1,76 @@
+.datos-kine-container {
+  background-color: #ffffff;
+  padding: 20px;
+  padding-left: 100px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: auto;
+  margin-top: 40px;
+}
+.formulario{
+  padding-left: 20px;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333333;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #555555;
+}
+
+.formularioC {
+  border-radius: 4px;
+  box-shadow: none;
+  border: 1px solid #ced4da;
+}
+
+.formularioN {
+  border-radius: 4px;
+  box-shadow: none;
+  border: 1px solid #ced4da;
+  width: 348px;
+  padding: 6px;
+}
+
+
+button {
+  min-width: 100px;
+}
+
+.guardar {
+  background-color: #007bff;
+  border-color: #007bff;
+  margin-right: 146px;
+}
+
+
+.cancelar {
+  background-color: #f14040;
+  border-color: black;
+
+}
+
+.cancelar:hover {
+  background-color: #e00b0b;
+  border-color: black;
+}
+
+.editar {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.editar:hover {
+  background-color: #1d5cb9;
+  border-color: #380bec;
+}
+
+
+.text-right {
+  text-align: right;
+}

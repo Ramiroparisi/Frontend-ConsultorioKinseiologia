@@ -114,7 +114,7 @@ const KinesiologoDashboard: React.FC = () => {
     <div className="dashboard">
       <div className="container pt-4 pb-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="dashboard-title">Bienvenido, {kinesiologo?.nombre} {kinesiologo?.apellido}</h1>
+          <h1 className="titulo">Bienvenido, {kinesiologo?.nombre} {kinesiologo?.apellido}</h1>
         </div>
 
         <div className="d-flex gap-3 mb-4">
@@ -137,7 +137,7 @@ const KinesiologoDashboard: React.FC = () => {
         <div className="dashboard-card mb-4">
           <div className="d-flex align-items-center gap-2 mb-3">
             <i className="bi bi-clock-history"></i>
-            <h2 className="section-title">Turnos Pendientes</h2>
+            <h2 className="subtitulos">Turnos Pendientes</h2>
           </div>
 
           {turnosFiltrados.map((turno, index) => (
@@ -157,9 +157,6 @@ const KinesiologoDashboard: React.FC = () => {
               </div>
 
               <div className="appointment-actions">
-                <button className="btn btn-link text-primary p-1">
-                  <i className="bi bi-pencil-square"></i>
-                </button>
                 <button
                   className="btn btn-link text-danger p-1"
                   onClick={() => eliminarTurno(turno.id)}
@@ -176,7 +173,7 @@ const KinesiologoDashboard: React.FC = () => {
             <span className="check-icon">
               <i className="bi bi-check-lg"></i>
             </span>
-            <h2 className="section-title">Turnos Asistidos</h2>
+            <h2 className="subtitulos">Turnos Asistidos</h2>
           </div>
 
           {turnosRealizados.map((turno, index) => (

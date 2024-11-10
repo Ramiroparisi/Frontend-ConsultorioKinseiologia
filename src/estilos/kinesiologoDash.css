@@ -19,7 +19,7 @@
   /* Ajusta el margen superior si es necesario */
 }
 
-.dashboard-title {
+.titulo {
   font-size: 1.5rem;
   /* Tamaño del texto */
   font-weight: 700;
@@ -139,7 +139,7 @@
   /* Espaciado a la derecha del icono */
 }
 
-.section-title {
+.subtitulos {
   font-size: 1.05rem;
   /* Tamaño de la fuente del título */
   font-weight: 600;
