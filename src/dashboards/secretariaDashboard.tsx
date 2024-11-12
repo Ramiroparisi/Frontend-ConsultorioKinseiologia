@@ -18,9 +18,27 @@ interface Especialidad {
 
 interface Disponibilidad {
   id: number;
-  dia: string;
-  horarioInicio: string;
-  horarioFin: string;
+  diaSemana: string;
+  fechaDesde: string;
+  horaInicio: string;
+  horaFin: string;
+  kinesiologo: Kinesiologo
+}
+
+interface Turno {
+  id: number;
+  fecha: Date;
+  hora: string;
+  estado: string;
+  importeTotal: number;
+  paciente: Paciente;
+  kinesiologo: Kinesiologo;
+}
+
+interface Paciente {
+  nombre: string;
+  apellido: string;
+  turnos: Turno[];
 }
 
 function SecretariaDashboard() {
@@ -87,18 +105,41 @@ function SecretariaDashboard() {
   // Función para obtener las disponibilidades filtradas por kinesiólogo seleccionado
   const fetchDisponibilidades = async (kineId: number) => {
     try {
-      const response = await fetch(`/api/disponibilidad/${kineId}`, {
+      const response = await fetch(`/api/disponibilidad/dispo/${kineId}`, {
         method: 'GET',
         credentials: 'include',
       });
       if (!response.ok)
         throw new Error('Error al obtener las disponibilidades');
       const data = await response.json();
+      console.log('disponibilidades', data)
       setDisponibilidades(data.data);
     } catch (error) {
       console.error('Error al obtener las disponibilidades:', error);
     }
   };
+
+  // Función para obtener los turnos pendientes del kinesiólogo
+  const fetchTurnosPendientes = async (kineId: number) => {
+    try {
+      const response = await fetch(`/api/turnos/pendientes/${kineId}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Error al obtener los turnos pendientes');
+      }
+      
+      const data = await response.json();
+      console.log('turnospend', data)
+
+      setTurnosFiltrados(data.turnos);
+    } catch (error) {
+      console.error('Error al obtener los turnos pendientes:', error);
+    }
+  };
+  
 
   // Función para manejar el cambio de especialidad
   const handleEspecialidadChange = (
@@ -218,6 +259,13 @@ function SecretariaDashboard() {
     }
   }, [especialidad]);
 
+    // Efecto para cargar los turnos cuando se selecciona un kinesiólogo
+    useEffect(() => {
+      if (kinesiologoSeleccionado) {
+        fetchTurnosPendientes(kinesiologoSeleccionado);
+      }
+    }, [kinesiologoSeleccionado]);
+
   return (
     <div className="dashboard">
       <div className="container pt-4 pb-4">
@@ -300,7 +348,7 @@ function SecretariaDashboard() {
                 key={dispo.id}
                 className="list-group-item d-flex justify-content-between align-items-center"
               >
-                {dispo.dia} {dispo.horarioInicio} - {dispo.horarioFin}
+                {dispo.diaSemana} {dispo.horaInicio} - {dispo.horaFin}
                 <div>
                   <button className="btn btn-outline-primary btn-sm me-2">
                     Modificar
