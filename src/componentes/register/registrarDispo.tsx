@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Container, Row, Col, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../../estilos/registros.css';
@@ -7,17 +7,37 @@ const RegistroDisponibilidad: React.FC = () => {
   const [diaSemana, setDiaSemana] = useState('');
   const [horaInicio, setHoraInicio] = useState('');
   const [horaFin, setHoraFin] = useState('');
+  const [kinesiologoId, setKinesiologoId] = useState<number | null>(null);
+  const [kinesiologos, setKinesiologos] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchKinesiologos = async () => {
+      try {
+        const response = await fetch('/api/kinesiologos/consul', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (!response.ok) throw new Error('Error al obtener los kinesiólogos');
+        const data = await response.json();
+        setKinesiologos(data.data);
+      } catch (error) {
+        console.error('Error al obtener los kinesiólogos:', error);
+        setErrorMessage('Hubo un problema al cargar los kinesiólogos.');
+      }
+    };
+
+    fetchKinesiologos();
+  }, []);
+
   const handleRegistrarDisponibilidad = async () => {
-    if (!diaSemana || !horaInicio || !horaFin) {
+    if (!diaSemana || !horaInicio || !horaFin || !kinesiologoId) {
       setErrorMessage('Por favor, completa todos los campos.');
       return;
     }
 
-    // Valido q la hora de fin no sea menor que la hora de inicio
     const [inicioHours, inicioMinutes] = horaInicio.split(':').map(Number);
     const [finHours, finMinutes] = horaFin.split(':').map(Number);
     if (
@@ -29,7 +49,6 @@ const RegistroDisponibilidad: React.FC = () => {
     }
 
     try {
-      //ver esto de la ruta ya que falta modificar un par el add
       const response = await fetch('/api/disponibilidad', {
         method: 'POST',
         credentials: 'include',
@@ -40,6 +59,7 @@ const RegistroDisponibilidad: React.FC = () => {
           diaSemana,
           horaInicio,
           horaFin,
+          kinesiologo: kinesiologoId, // Enviar el ID del kinesiólogo
         }),
       });
 
@@ -49,7 +69,6 @@ const RegistroDisponibilidad: React.FC = () => {
 
       setSuccessMessage('Disponibilidad registrada con éxito.');
 
-      // hago recursivo el registro de disponibilidad
       setTimeout(() => {
         navigate('/registroDisponibilidad');
       }, 2000);
@@ -60,7 +79,6 @@ const RegistroDisponibilidad: React.FC = () => {
   };
 
   return (
-    <body className='register'>  
     <Container
       className="d-flex flex-column justify-content-center align-items-center pt-4"
       style={{ minHeight: '100vh' }}
@@ -68,13 +86,34 @@ const RegistroDisponibilidad: React.FC = () => {
       <h1 className="text-center mb-4">Registrar Disponibilidad</h1>
 
       <Form className="w-100">
-        {/* Mostrar alerta de error si hay algún mensaje */}
         {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-
-        {/* Mostrar alerta de éxito si se registró correctamente */}
         {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
-        {/* Fila para seleccionar el día */}
+        {/* Selector de kinesiólogo */}
+        <Row className="mb-3">
+          <Col xs={12}>
+            <Form.Group controlId="kinesiologo">
+              <Form.Label>Kinesiólogo</Form.Label>
+              <Form.Control
+                as="select"
+                value={kinesiologoId ?? ''}
+                onChange={(e) => setKinesiologoId(Number(e.target.value))}
+                required
+              >
+                <option value="">Seleccione un kinesiólogo...</option>
+                {kinesiologos.map(
+                  (kine: { id: number; nombre: string; apellido: string }) => (
+                    <option key={kine.id} value={kine.id}>
+                      {kine.nombre} {kine.apellido}
+                    </option>
+                  )
+                )}
+              </Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Selector de día */}
         <Row className="mb-3">
           <Col xs={12}>
             <Form.Group controlId="diaSemana">
@@ -97,7 +136,7 @@ const RegistroDisponibilidad: React.FC = () => {
           </Col>
         </Row>
 
-        {/* Fila para seleccionar hora de inicio */}
+        {/* Selector de horas */}
         <Row className="mb-3">
           <Col xs={12} md={6}>
             <Form.Group controlId="horaInicio">
@@ -116,7 +155,6 @@ const RegistroDisponibilidad: React.FC = () => {
             </Form.Group>
           </Col>
 
-          {/* Fila para seleccionar hora de fin */}
           <Col xs={12} md={6}>
             <Form.Group controlId="horaFin">
               <Form.Label>Hora de Fin</Form.Label>
@@ -135,7 +173,7 @@ const RegistroDisponibilidad: React.FC = () => {
           </Col>
         </Row>
 
-        {/* Fila para los botones */}
+        {/* Botones */}
         <Row className="mb-3">
           <Col xs={6} className="d-flex justify-content-end">
             <Button
@@ -152,13 +190,12 @@ const RegistroDisponibilidad: React.FC = () => {
               className="w-100"
               onClick={() => navigate('/secretariaDashboard')}
             >
-              Dejar de Registrar
+              Cancelar
             </Button>
           </Col>
         </Row>
       </Form>
     </Container>
-    </body>
   );
 };
 

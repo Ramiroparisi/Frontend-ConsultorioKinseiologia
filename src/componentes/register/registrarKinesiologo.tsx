@@ -9,6 +9,11 @@ interface Especialidad {
   estado: boolean;
 }
 
+interface Consultorio {
+  id: number;
+  nombre: string;
+}
+
 const RegistroKinesiologo: React.FC = () => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
@@ -17,10 +22,11 @@ const RegistroKinesiologo: React.FC = () => {
   const [dni, setDni] = useState('');
   const [matricula, setMatricula] = useState('');
   const [especialidad, setEspecialidad] = useState<number | ''>('');
-  const [consultorioId, setConsultorioId] = useState<number | null>(null);
+  const [consultorio, setConsultorio] = useState< number | ''>('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [especialidades, setEspecialidades] = useState<Especialidad[]>([]);
+  const [consultorios, setConsultorios] = useState<Consultorio[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
@@ -43,8 +49,25 @@ const RegistroKinesiologo: React.FC = () => {
       console.error('Error al obtener las especialidades:', error);
     }
   };
+  const fetchConsultorios = async () => {
+    try {
+      const response = await fetch('/api/consultorios', {
+        method: 'GET',
+        credentials: 'include', // Incluir cookies si son necesarias
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener los consultorios');
+      }
+      const data = await response.json();
+      // Filtrar solo las especialidades activas (estado: true)
+      setConsultorios(data.data);
+    } catch (error) {
+      console.error('Error al obtener los consultorios:', error);
+    }
+  };
 
   useEffect(() => {
+    fetchConsultorios()
     fetchEspecialidades();
   }, []);
 
@@ -58,6 +81,7 @@ const RegistroKinesiologo: React.FC = () => {
       !dni ||
       !matricula ||
       especialidad === '' ||
+      consultorio === '' ||
       !password ||
       !confirmPassword
     ) {
@@ -82,11 +106,12 @@ const RegistroKinesiologo: React.FC = () => {
           nombre,
           apellido,
           email,
-          telefono: Number(telefono),
+          telefono,
           dni: Number(dni),
           matricula,
           especialidad,
           password,
+          consultorio,
         }),
       });
 
@@ -204,6 +229,24 @@ const RegistroKinesiologo: React.FC = () => {
             {especialidades.map((especialidad) => (
               <option key={especialidad.id} value={especialidad.id}>
                 {especialidad.nombre}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+
+        {/* Campo de consultorio */}
+        <Form.Group controlId="consultorio" className="mb-3">
+          <Form.Label>Consultorio</Form.Label>
+          <Form.Control
+            as="select"
+            value={consultorio}
+            onChange={(e) => setConsultorio(Number(e.target.value))}
+            required
+          >
+            <option value="">Seleccione Consultorio...</option>
+            {consultorios.map((consultorio) => (
+              <option key={consultorio.id} value={consultorio.id}>
+                {consultorio.nombre}
               </option>
             ))}
           </Form.Control>

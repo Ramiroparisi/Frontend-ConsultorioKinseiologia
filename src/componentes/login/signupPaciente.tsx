@@ -72,7 +72,7 @@ const SignUpPaciente = () => {
         return;
     }
     if (!/^\d+$/.test(telefono)) {
-        setError('la obrasocial solo debe contener valores numéricos');
+        setError('El telefono solo debe contener valores numéricos');
         return;
     }
     setError(''); // Limpiar errores previos
@@ -119,25 +119,24 @@ const SignUpPaciente = () => {
         <Form onSubmit={handleSignUp}>
           {error && <Alert variant="danger">{error}</Alert>}
 
-          <Form.Group controlId="name" className="d-flex align-items-center">
-            <div className="me-2">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                placeholder="Nombre"
-              />
-            </div>
-            <div>
-              <Form.Label>Apellido</Form.Label>
-              <Form.Control
-                type="text"
-                value={apellido}
-                onChange={(e) => setApellido(e.target.value)}
-                placeholder="Apellido"
-              />
-            </div>
+          <Form.Group controlId="nombre">
+            <Form.Label>Nombre</Form.Label>
+            <Form.Control
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              placeholder="Nombre"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="apellido">
+            <Form.Label>Apellido</Form.Label>
+            <Form.Control
+              type="text"
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
+              placeholder="Apellido"
+            />
           </Form.Group>
 
           <Form.Group controlId="dni">
@@ -153,7 +152,7 @@ const SignUpPaciente = () => {
           <Form.Group controlId="fechadenacimiento">
             <Form.Label>Fecha de Nacimietno</Form.Label>
             <Form.Control
-              type="text"
+              type="date"
               value={fechaNacimiento}
               onChange={(e) => setFecha(e.target.value)}
               placeholder="YYYY-MM-DD"

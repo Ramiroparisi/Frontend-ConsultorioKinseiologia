@@ -5,8 +5,8 @@ import '../../estilos/registros.css';
 
 const RegistroEspecialidad: React.FC = () => {
   const [nombre, setNombre] = useState('');
-  const [estado, setEstado] = useState(true); // Por defecto lo dejo activo
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Mensaje de éxito
   const navigate = useNavigate();
 
   const RegistrarEspecialidad = async () => {
@@ -24,7 +24,6 @@ const RegistroEspecialidad: React.FC = () => {
         },
         body: JSON.stringify({
           nombre,
-          estado,
         }),
       });
 
@@ -32,7 +31,13 @@ const RegistroEspecialidad: React.FC = () => {
         throw new Error('Error al registrar la especialidad');
       }
 
-      navigate('/secretariaDashboard');
+      // Si el registro es exitoso, mostramos un mensaje de éxito
+      setSuccessMessage('Especialidad registrada correctamente.');
+
+      // Después de mostrar el mensaje, redirigimos al dashboard de secretaria
+      setTimeout(() => {
+        navigate('/secretariaDashboard');
+      }, 2000); // Espera 2 segundos para que el usuario vea el mensaje de éxito
     } catch (error) {
       console.error('Error al registrar la especialidad:', error);
       setErrorMessage('Hubo un error al registrar la especialidad.');
@@ -40,7 +45,6 @@ const RegistroEspecialidad: React.FC = () => {
   };
 
   return (
-    <body className='register'>
     <Container
       className="d-flex flex-column justify-content-center align-items-center pt-4"
       style={{ minHeight: '100vh' }}
@@ -49,7 +53,10 @@ const RegistroEspecialidad: React.FC = () => {
 
       <Form className="w-100">
         {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-
+        {successMessage && (
+          <Alert variant="success">{successMessage}</Alert>
+        )}{' '}
+        {/* Mostrar mensaje de éxito */}
         {/* Campo de nombre de la especialidad */}
         <Form.Group controlId="nombre" className="mb-3">
           <Form.Label>Nombre de la Especialidad</Form.Label>
@@ -60,18 +67,6 @@ const RegistroEspecialidad: React.FC = () => {
             required
           />
         </Form.Group>
-
-        {/* Estado (Activo/Inactivo) */}
-        <Form.Group controlId="estado" className="mb-3">
-          <Form.Label>Estado</Form.Label>
-          <Form.Check
-            type="checkbox"
-            label="Activo"
-            checked={estado}
-            onChange={(e) => setEstado(e.target.checked)}
-          />
-        </Form.Group>
-
         <Row className="mb-3">
           <Col xs={6} className="d-flex justify-content-end">
             <Button
@@ -94,7 +89,6 @@ const RegistroEspecialidad: React.FC = () => {
         </Row>
       </Form>
     </Container>
-    </body>
   );
 };
 
