@@ -33,6 +33,7 @@ function SecretariaDashboard() {
   const [kinesiologoSeleccionado, setKinesiologoSeleccionado] = useState<
     number | null
   >(null);
+  const [turnosFiltrados, setTurnosFiltrados] = useState<Turno[]>([]);
 
   const navigate = useNavigate();
 
@@ -166,6 +167,45 @@ function SecretariaDashboard() {
     }
   };
 
+  const eliminarTurno = async (id: number) => {
+    //ver bien esto (pendiente)
+    try {
+      const confirmar = window.confirm(
+        '¿Está seguro de que desea eliminar este turno?'
+      );
+      if (confirmar) {
+        const response = await fetch(`/api/turnos/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+        if (!response.ok) throw new Error('Error al eliminar el turno');
+        alert('Turno eliminado con éxito.');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el turno:', error);
+    }
+  };
+
+  const handleRemoveEspecialidad = async (id: number) => {
+    //ver bien esto (pendiente)
+    try {
+      const confirmar = window.confirm(
+        '¿Está seguro de que desea eliminar esta especialidad?'
+      );
+      if (confirmar) {
+        const response = await fetch(`/api/especialidades/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+        if (!response.ok) throw new Error('Error al eliminar la especialidad');
+        alert('Especialidad eliminada con éxito.');
+        fetchEspecialidades();
+      }
+    } catch (error) {
+      console.error('Error al eliminar la especialidad:', error);
+    }
+  };
+
   useEffect(() => {
     fetchEspecialidades();
   }, []);
@@ -284,6 +324,83 @@ function SecretariaDashboard() {
               Agregar Disponibilidad
             </button>
           </div>
+        </div>
+
+        {/* Sección de Turnos Pendientes */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-clock-history"></i>
+            <h2 className="subtitulos">Turnos Pendientes</h2>
+          </div>
+
+          {turnosFiltrados.map((turno, index) => (
+            <div key={index} className="appointment-row">
+              <div className="d-flex align-items-center">
+                <span className="appointment-icon">
+                  <i className="bi bi-calendar"></i>
+                </span>
+                <span className="me-2">
+                  {new Date(turno.fecha).toLocaleDateString()}
+                </span>
+                <span className="appointment-icon me-2">
+                  <i className="bi bi-clock"></i>
+                </span>
+                <span className="me-2">{turno.hora}</span>
+                <span className="text-secondary">
+                  - {turno.paciente.nombre} {turno.paciente.apellido}
+                </span>
+              </div>
+
+              <div className="appointment-actions">
+                <button
+                  className="btn btn-link text-danger p-1"
+                  onClick={() => eliminarTurno(turno.id)}
+                >
+                  <i className="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Sección Especialidades (moved here) */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-file-earmark-medical"></i>
+            <h2 className="section-title">Especialidades</h2>
+          </div>
+          <div className="list-group">
+            {especialidades.map((especialidad) => (
+              <div
+                key={especialidad.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                <span>{especialidad.nombre}</span>
+                <div>
+                  <button
+                    className="btn btn-outline-warning btn-sm"
+                    onClick={() =>
+                      navigate(`/modificarEspecialidad/${especialidad.id}`)
+                    }
+                  >
+                    Modificar
+                  </button>
+                  <button
+                    className="btn btn-outline-danger btn-sm ml-2"
+                    onClick={() => handleRemoveEspecialidad(especialidad.id)}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            className="btn btn-primary mt-3"
+            onClick={() => navigate('/registroEspecialidad')}
+          >
+            Agregar Especialidad
+          </button>
         </div>
       </div>
     </div>

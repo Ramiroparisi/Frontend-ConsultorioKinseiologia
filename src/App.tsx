@@ -37,6 +37,7 @@ import CrearTurnoPaciente from './componentes/crearTurnos/turnoNuevoPaciente.tsx
 // Perfiles
 import DatosKine from './componentes/perfiles/perfilKine.tsx';
 import DatosPaciente from './componentes/perfiles/perfilPaciente.tsx';
+import RegistroEspecialidad from './componentes/register/registrarEspecialidad.tsx';
 
 const App = () => {
   return (
@@ -98,6 +99,10 @@ const App = () => {
         <Route
           path="/registroDisponibilidad"
           element={<RegistroDisponibilidad />}
+        />
+        <Route
+          path="/registroEspecialidad"
+          element={<RegistroEspecialidad />}
         />
 
         {/* Rutas para los dashboards */}
@@ -169,7 +174,7 @@ const App = () => {
             </>
           }
         />
-                <Route
+        <Route
           path="/datosPaciente"
           element={
             <>

@@ -29,6 +29,7 @@ const RegistroDisponibilidad: React.FC = () => {
     }
 
     try {
+      //ver esto de la ruta ya que falta modificar un par el add
       const response = await fetch('/api/disponibilidad', {
         method: 'POST',
         credentials: 'include',
