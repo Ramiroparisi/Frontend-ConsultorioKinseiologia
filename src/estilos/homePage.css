@@ -3,40 +3,48 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f0f0f0;
 }
 
 .container {
   text-align: center;
   background-color: #fff;
-  padding: 2rem;
+  padding: 20px;
   border-radius: 10px;
   max-width: 540px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  margin-bottom: 2rem;
-  font-size: 2rem;
+  margin-bottom: 20px;
+  font-size: 32px;
 }
 
-.button{
-  margin: 10px;
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn {
   padding: 10px 20px;
-  background-color: #606C38;
+  background-color: #0d6efd;
   color: white;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
-
+  width: 100%;
+  max-width: 200px;
 }
 
-.button:hover {
-  background-color: #283618;
+.btn:hover {
+  background-color: #0a58ca;
 }
-
-.button:disabled {
-  background-color: #283618;
-  cursor: not-allowed;
+/*manejo para pantallas pequeñas*/
+@media (min-width: 768px) {
+  .button-group {
+    flex-direction: row;
+  }
 }

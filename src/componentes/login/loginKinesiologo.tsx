@@ -1,122 +1,89 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
-import '../../estilos/login.css';
+import { Form, Button, Alert, Container } from 'react-bootstrap';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
+import { useNavigate } from 'react-router-dom';
+import '../../estilos/login.css';
 
 const LoginKinesiologo = () => {
   const [matricula, setMatricula] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  const navigate = useNavigate(); // Hook para redirigir
 
-  const handleLogin = async (event: React.FormEvent) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (event) => {
     event.preventDefault();
 
-    // Validación de los inputs
-    if (!matricula && !password) {
-      setError('Todos los campos son obligatorios');
-      return;
-    }
-    if (!matricula) {
-      setError('Debe ingresar su matricula');
-      return;
-    }
-     else if (!password) {
-      setError('Debe ingresar su contraseña');
-      return;
-    }
-    if (!/^\d+$/.test(matricula)) {
-      setError('La matrícula solo debe contener valores numéricos');
+    if (!matricula || !password) {
+      setError('Debe completar todos los campos');
       return;
     }
 
-    setError(''); // Limpiar errores previos
     setLoading(true);
+    setError('');
 
     try {
-      // Llamada al backend para autenticar (con el puerto 3000)
       const response = await fetch('/api/kinesiologos/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',  // Incluir cookies en la solicitud
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ matricula, password }),
       });
 
       const data = await response.json();
-
       if (!response.ok) {
-        setError(data.message || 'Error en la autenticación');
+        setError(data.message || 'Error al iniciar sesión');
         setLoading(false);
         return;
       }
 
-      // Guardar el token JWT en cookies
-      Cookies.set('token', data.token, { expires: 1 }); // Guardar el token por 1 día
-
-      // Redirigir al dashboard del kinesiologo
+      Cookies.set('token', data.token, { expires: 1 });
       navigate('/kinesiologoDashboard');
-    } catch (error) {
-      console.error('Error en el login:', error);
-      setError('Error en la conexión. Inténtalo más tarde.');
+    } catch (err) {
+      setError('Error en la conexión');
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
-    <section className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      
-      <div className="col-md-2">
-        <h1 className="text-center mb-4">Iniciar sesión</h1>
-        
-        <Form onSubmit={handleLogin}>
-          {error && <Alert variant="danger">{error}</Alert>}
-
-          <Form.Group controlId="matricula">
-            <Form.Label>Ingrese su matrícula</Form.Label>
-            <Form.Control
-              type="text"
-              value={matricula}
-              onChange={(e) => setMatricula(e.target.value)}
-              placeholder="Matrícula"
-            />
-          </Form.Group>
-
-          <Form.Group controlId="password" className="mt-3">
-            <Form.Label>Ingrese su contraseña</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Contraseña"
-            />
-          </Form.Group>
-
-    
-          <Button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                  className="me-2"
-                />
-                Ingresando...
-              </>
-            ) : ('Ingresar')}
-          </Button>
-
-        </Form>
-      </div>
-    </section>
+    <>
+      <div className="header-spacer"></div>
+      <Container className="d-flex justify-content-center align-items-center vh-100 bg-light">
+        <div className="col-sm-8 col-md-6 col-lg-4 p-4 shadow rounded bg-white">
+          <h1 className="text-center mb-4">Iniciar sesión</h1>
+          <Form onSubmit={handleLogin}>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form.Group controlId="matricula" className="mb-3">
+              <Form.Label>Matrícula</Form.Label>
+              <Form.Control
+                type="text"
+                value={matricula}
+                onChange={(e) => setMatricula(e.target.value)}
+                placeholder="Ingrese su matrícula"
+              />
+            </Form.Group>
+            <Form.Group controlId="password" className="mb-3">
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Ingrese su contraseña"
+              />
+            </Form.Group>
+            <Button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
+              {loading ? 'Ingresando...' : 'Ingresar'}
+            </Button>
+          </Form>
+        </div>
+      </Container>
+    </>
   );
 };
 
