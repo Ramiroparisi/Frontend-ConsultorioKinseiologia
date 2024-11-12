@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../estilos/perfilKine.css';
+import '../../estilos/perfiles.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -13,7 +13,6 @@ interface Paciente {
   telefono: number;
   obraSocial: string;
 }
-
 
 const DatosPaciente: React.FC = () => {
   const [paciente, setPaciente] = useState<Paciente | null>(null);
@@ -66,12 +65,11 @@ const DatosPaciente: React.FC = () => {
   const handleSave = async () => {
     if (!paciente) return;
 
-
     const dataToUpdate = {
       nombre: editedData?.nombre,
       apellido: editedData?.apellido,
       dni: editedData?.dni,
-//      fechaNacimiento: editedData?.fechaNacimiento,
+      //      fechaNacimiento: editedData?.fechaNacimiento,
       email: editedData?.email,
       telefono: editedData?.telefono,
       obraSocial: editedData?.obraSocial,
@@ -137,7 +135,7 @@ const DatosPaciente: React.FC = () => {
               disabled={!isEditing}
             />
           </div>
-{/*       <div>
+          {/*       <div>
           <label>Fecha de nacimiento:</label>
             <input
               type="text"
@@ -186,7 +184,11 @@ const DatosPaciente: React.FC = () => {
                 <Button type="button" className="guardar" onClick={handleSave}>
                   Guardar
                 </Button>
-                <Button type="button" className="cancelar" onClick={handleCancel}>
+                <Button
+                  type="button"
+                  className="cancelar"
+                  onClick={handleCancel}
+                >
                   Cancelar
                 </Button>
               </>

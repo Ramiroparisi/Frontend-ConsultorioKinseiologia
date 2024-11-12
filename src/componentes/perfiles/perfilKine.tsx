@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../estilos/perfilKine.css';
+import '../../estilos/perfiles.css';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -70,7 +70,6 @@ const DatosKine: React.FC = () => {
   const handleSave = async () => {
     if (!kinesiologo) return;
 
-  
     const dataToUpdate = {
       nombre: editedData?.nombre,
       apellido: editedData?.apellido,
@@ -177,7 +176,11 @@ const DatosKine: React.FC = () => {
                 <Button type="button" className="guardar" onClick={handleSave}>
                   Guardar
                 </Button>
-                <Button type="button" className="cancelar" onClick={handleCancel}>
+                <Button
+                  type="button"
+                  className="cancelar"
+                  onClick={handleCancel}
+                >
                   Cancelar
                 </Button>
               </>

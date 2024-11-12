@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Container, Alert, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import '../../estilos/registrarKine.css';
+import '../../estilos/registros.css';
 
 interface Especialidad {
   id: number;
@@ -199,7 +199,7 @@ const RegistroKinesiologo: React.FC = () => {
             onChange={(e) => setEspecialidad(Number(e.target.value))}
             required
           >
-            <option value="">Seleccione...</option>
+            <option value="">Seleccione Especialidad...</option>
             {especialidades.map((especialidad) => (
               <option key={especialidad.id} value={especialidad.id}>
                 {especialidad.nombre}

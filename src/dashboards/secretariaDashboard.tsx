@@ -16,16 +16,25 @@ interface Especialidad {
   estado: boolean;
 }
 
+interface Disponibilidad {
+  id: number;
+  dia: string;
+  horarioInicio: string;
+  horarioFin: string;
+}
+
 function SecretariaDashboard() {
   const [especialidad, setEspecialidad] = useState<Especialidad | null>(null);
   const [especialidades, setEspecialidades] = useState<Especialidad[]>([]);
   const [kinesiologos, setKinesiologos] = useState<Kinesiologo[]>([]);
-  const [turnos, setTurnos] = useState<Turno[]>([]);
-  const [turnosPendientes, setTurnosPendientes] = useState<Turno[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [filtroEspecialidad, setFiltroEspecialidad] = useState<string>('');
-  const [filtroKinesiologo, setFiltroKinesiologo] = useState<number | ''>('');
-  const [consultorioId, setConsultorioId] = useState<number | null>(null);
+  const [disponibilidades, setDisponibilidades] = useState<Disponibilidad[]>(
+    []
+  );
+  const [kinesiologoSeleccionado, setKinesiologoSeleccionado] = useState<
+    number | null
+  >(null);
+  const [turnosFiltrados, setTurnosFiltrados] = useState<Turno[]>([]);
+
   const navigate = useNavigate();
 
   // Función para obtener las especialidades activas
@@ -33,13 +42,10 @@ function SecretariaDashboard() {
     try {
       const response = await fetch('/api/especialidades', {
         method: 'GET',
-        credentials: 'include', // Incluir cookies si son necesarias
+        credentials: 'include',
       });
-      if (!response.ok) {
-        throw new Error('Error al obtener las especialidades');
-      }
+      if (!response.ok) throw new Error('Error al obtener las especialidades');
       const data = await response.json();
-      // Filtrar solo las especialidades activas (estado: true)
       setEspecialidades(
         data.data.filter((especialidad: Especialidad) => especialidad.estado)
       );
@@ -78,18 +84,21 @@ function SecretariaDashboard() {
     }
   };
 
-  useEffect(() => {
-    fetchEspecialidades();
-  }, []);
-
-  // Efecto que se ejecuta cuando se selecciona una especialidad
-  useEffect(() => {
-    if (especialidad) {
-      fetchKinesiologos(especialidad.id);
-    } else {
-      fetchTodosLosKinesiologos();
+  // Función para obtener las disponibilidades filtradas por kinesiólogo seleccionado
+  const fetchDisponibilidades = async (kineId: number) => {
+    try {
+      const response = await fetch(`/api/disponibilidad/${kineId}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (!response.ok)
+        throw new Error('Error al obtener las disponibilidades');
+      const data = await response.json();
+      setDisponibilidades(data.data);
+    } catch (error) {
+      console.error('Error al obtener las disponibilidades:', error);
     }
-  }, [especialidad]);
+  };
 
   // Función para manejar el cambio de especialidad
   const handleEspecialidadChange = (
@@ -104,48 +113,117 @@ function SecretariaDashboard() {
     setEspecialidad(selectedEspecialidad || null);
   };
 
-  // Función general para eliminar un ítem
+  // Función para manejar el cambio de kinesiólogo seleccionado y cargar disponibilidades
+  const handleKinesiologoChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedKineId = parseInt(event.target.value);
+    setKinesiologoSeleccionado(selectedKineId);
+    fetchDisponibilidades(selectedKineId);
+  };
+
+  // Función para eliminar una disponibilidad
+  const handleRemoveDisponibilidad = async (id: number) => {
+    try {
+      const confirmar = window.confirm(
+        '¿Está seguro de que desea eliminar esta disponibilidad?'
+      );
+      if (confirmar) {
+        const response = await fetch(`/api/disponibilidad/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+        if (!response.ok)
+          throw new Error('Error al eliminar la disponibilidad');
+        alert('Disponibilidad eliminada con éxito.');
+        if (kinesiologoSeleccionado)
+          fetchDisponibilidades(kinesiologoSeleccionado); // Recargar disponibilidades
+      }
+    } catch (error) {
+      console.error('Error al eliminar la disponibilidad:', error);
+    }
+  };
+
+  // Función general para eliminar un Kinesiologo
   const handleRemoveItem = async (id: number) => {
     try {
-      // Mostrar la ventana de confirmación
       const confirmar = window.confirm(
         '¿Está seguro de que desea dar de baja al kinesiologo?'
       );
-
       if (confirmar) {
-        // Hacer una solicitud DELETE al backend
         const response = await fetch(`/api/kinesiologos/${id}`, {
           method: 'DELETE',
           credentials: 'include',
         });
-
         if (!response.ok) {
           const errorData = await response.json();
-          // Si tiene turnos activos, mostrar el mensaje de error
-          alert(errorData.message); // Muestra el mensaje del backend al usuario
+          alert(errorData.message);
         } else {
-          // Si se eliminó correctamente
           alert('Kinesiologo eliminado con éxito.');
-          // Aquí puedes actualizar la lista de kinesiologos en el frontend
         }
-      } else {
-        console.log('El usuario canceló la eliminación del kinesiologo.');
       }
     } catch (error) {
       console.error('Error al intentar eliminar el kinesiologo:', error);
     }
   };
 
-  // Función para manejar la navegación
-  const handleNavigation = (path: string) => {
-    navigate(path);
+  const eliminarTurno = async (id: number) => {
+    //ver bien esto (pendiente)
+    try {
+      const confirmar = window.confirm(
+        '¿Está seguro de que desea eliminar este turno?'
+      );
+      if (confirmar) {
+        const response = await fetch(`/api/turnos/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+        if (!response.ok) throw new Error('Error al eliminar el turno');
+        alert('Turno eliminado con éxito.');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el turno:', error);
+    }
   };
+
+  const handleRemoveEspecialidad = async (id: number) => {
+    //ver bien esto (pendiente)
+    try {
+      const confirmar = window.confirm(
+        '¿Está seguro de que desea eliminar esta especialidad?'
+      );
+      if (confirmar) {
+        const response = await fetch(`/api/especialidades/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+        if (!response.ok) throw new Error('Error al eliminar la especialidad');
+        alert('Especialidad eliminada con éxito.');
+        fetchEspecialidades();
+      }
+    } catch (error) {
+      console.error('Error al eliminar la especialidad:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEspecialidades();
+  }, []);
+
+  useEffect(() => {
+    if (especialidad) {
+      fetchKinesiologos(especialidad.id);
+    } else {
+      fetchTodosLosKinesiologos();
+    }
+  }, [especialidad]);
 
   return (
     <div className="dashboard">
       <div className="container pt-4 pb-4">
         <h1 className="dashboard-title">Dashboard de Secretaria</h1>
 
+        {/* Sección Kinesiologos */}
         <div className="dashboard-card mb-4">
           <div className="d-flex align-items-center gap-2 mb-3">
             <i className="bi bi-person-circle"></i>
@@ -160,15 +238,11 @@ function SecretariaDashboard() {
               onChange={handleEspecialidadChange}
             >
               <option value="">Todas las Especialidades</option>
-              {especialidades.length > 0 ? (
-                especialidades.map((esp) => (
-                  <option key={esp.id} value={esp.id}>
-                    {esp.nombre}
-                  </option>
-                ))
-              ) : (
-                <option>No hay especialidades disponibles</option>
-              )}
+              {especialidades.map((esp) => (
+                <option key={esp.id} value={esp.id}>
+                  {esp.nombre}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -194,11 +268,139 @@ function SecretariaDashboard() {
           <div className="text-center mt-3">
             <button
               className="btn btn-primary"
-              onClick={() => handleNavigation('/registroKinesiologo')}
+              onClick={() => navigate('/registroKinesiologo')}
             >
               Agregar Kinesiologo
             </button>
           </div>
+        </div>
+
+        {/* Sección Disponibilidades */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-calendar"></i>
+            <h2 className="section-title">Disponibilidades</h2>
+          </div>
+
+          <select
+            className="form-select mb-3"
+            onChange={handleKinesiologoChange}
+          >
+            <option value="">Seleccionar Kinesiologo</option>
+            {kinesiologos.map((kine) => (
+              <option key={kine.id} value={kine.id}>
+                {kine.nombre} {kine.apellido}
+              </option>
+            ))}
+          </select>
+
+          <ul className="list-group">
+            {disponibilidades.map((dispo) => (
+              <li
+                key={dispo.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {dispo.dia} {dispo.horarioInicio} - {dispo.horarioFin}
+                <div>
+                  <button className="btn btn-outline-primary btn-sm me-2">
+                    Modificar
+                  </button>
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => handleRemoveDisponibilidad(dispo.id)}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="text-center mt-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate('/registroDisponibilidad')}
+            >
+              Agregar Disponibilidad
+            </button>
+          </div>
+        </div>
+
+        {/* Sección de Turnos Pendientes */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-clock-history"></i>
+            <h2 className="subtitulos">Turnos Pendientes</h2>
+          </div>
+
+          {turnosFiltrados.map((turno, index) => (
+            <div key={index} className="appointment-row">
+              <div className="d-flex align-items-center">
+                <span className="appointment-icon">
+                  <i className="bi bi-calendar"></i>
+                </span>
+                <span className="me-2">
+                  {new Date(turno.fecha).toLocaleDateString()}
+                </span>
+                <span className="appointment-icon me-2">
+                  <i className="bi bi-clock"></i>
+                </span>
+                <span className="me-2">{turno.hora}</span>
+                <span className="text-secondary">
+                  - {turno.paciente.nombre} {turno.paciente.apellido}
+                </span>
+              </div>
+
+              <div className="appointment-actions">
+                <button
+                  className="btn btn-link text-danger p-1"
+                  onClick={() => eliminarTurno(turno.id)}
+                >
+                  <i className="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Sección Especialidades (moved here) */}
+        <div className="dashboard-card mb-4">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-file-earmark-medical"></i>
+            <h2 className="section-title">Especialidades</h2>
+          </div>
+          <div className="list-group">
+            {especialidades.map((especialidad) => (
+              <div
+                key={especialidad.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                <span>{especialidad.nombre}</span>
+                <div>
+                  <button
+                    className="btn btn-outline-warning btn-sm"
+                    onClick={() =>
+                      navigate(`/modificarEspecialidad/${especialidad.id}`)
+                    }
+                  >
+                    Modificar
+                  </button>
+                  <button
+                    className="btn btn-outline-danger btn-sm ml-2"
+                    onClick={() => handleRemoveEspecialidad(especialidad.id)}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            className="btn btn-primary mt-3"
+            onClick={() => navigate('/registroEspecialidad')}
+          >
+            Agregar Especialidad
+          </button>
         </div>
       </div>
     </div>
