@@ -37,7 +37,9 @@ import CrearTurnoPaciente from './componentes/crearTurnos/turnoNuevoPaciente.tsx
 // Perfiles
 import DatosKine from './componentes/perfiles/perfilKine.tsx';
 import DatosPaciente from './componentes/perfiles/perfilPaciente.tsx';
+import DatosSecretaria from './componentes/perfiles/perfilSecretaria.tsx';
 import RegistroEspecialidad from './componentes/register/registrarEspecialidad.tsx';
+import DashboardHeaderSecretaria from './componentes/header/dashboardHeaderSecretaria.tsx';
 
 const App = () => {
   return (
@@ -128,7 +130,7 @@ const App = () => {
           path="/secretariaDashboard"
           element={
             <>
-              <DashboardHeader />
+              <DashboardHeaderSecretaria />
               <SecretariaDashboard />
             </>
           }
@@ -164,7 +166,7 @@ const App = () => {
             </>
           }
         />
-        {/* Rutas para los datos de kinesiologo */}
+        {/* Rutas para los datos de los perfiles */}
         <Route
           path="/datosKine"
           element={
@@ -180,6 +182,15 @@ const App = () => {
             <>
               <DashboardHeader />
               <DatosPaciente />
+            </>
+          }
+        />
+        <Route
+          path="/datosSecretaria"
+          element={
+            <>
+              <DashboardHeaderSecretaria />
+              <DatosSecretaria />
             </>
           }
         />
