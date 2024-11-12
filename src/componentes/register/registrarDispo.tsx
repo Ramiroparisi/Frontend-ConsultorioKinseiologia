@@ -60,6 +60,7 @@ const RegistroDisponibilidad: React.FC = () => {
   };
 
   return (
+    <body className='register'>  
     <Container
       className="d-flex flex-column justify-content-center align-items-center pt-4"
       style={{ minHeight: '100vh' }}
@@ -157,6 +158,7 @@ const RegistroDisponibilidad: React.FC = () => {
         </Row>
       </Form>
     </Container>
+    </body>
   );
 };
 

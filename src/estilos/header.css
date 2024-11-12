@@ -1,64 +1,90 @@
-/* Estilo del contenedor del header */
+/* Estilos para el Header */
 .navbar {
-    background-color: #606C38; /* Color de fondo */
-    color: white; /* Color del texto */
-    position: fixed; /* Hace que el header sea fijo */
-    top: 0; /* Fija en la parte superior */
-    width: 100%; /* El header ocupa todo el ancho de la página */
-    padding: 10px 20px; /* Espaciado interno */
-    z-index: 1000; /* Asegura que el header esté encima de otros elementos */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para el efecto de flotación */
-  }
-  
-  /* Estilo del contenedor interno */
-  .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-  }
-  
-  /* Título del navbar */
-  .navbar-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  /* Estilos de los links */
-  .navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    margin: 0;
-  }
-  
-  .navbar-links a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  .navbar-links a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Ajuste de márgenes para el contenido principal debajo del header */
-  body, .content {
-    margin-top: 60px; /* Ajusta el margen superior para que no se superponga con el header */
+  background-color: #161615;
+  color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 10px 20px;
+  z-index: 1000;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
+  /* Evita margen duplicado */
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar-nav {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  list-style: none;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav-link:hover {
+  color: #0d6efd;
+}
+
+.btn-outline-primary {
+  color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+/* Espaciador dinámico para compensar el header */
+.header-spacer {
+  height: 80px;
+  /* Altura fija para compensar el header */
+}
+
+/* Estilos para pantallas pequeñas */
+@media (max-width: 768px) {
+  .navbar-nav {
+    flex-direction: column;
   }
 
-  .navbar-nav .nav-item .dropdown-menu .dropdown-item.cerrar-sesion {
-    background-color: red;
-    color: white;
+  .navbar-nav .nav-item {
+    margin-bottom: 10px;
   }
-  
-  .navbar-nav .nav-item .dropdown-menu .dropdown-item.cerrar-sesion:hover,
-  .navbar-nav .nav-item .dropdown-menu .dropdown-item.cerrar-sesion:focus {
-    background-color: darkred; /* Un color más oscuro al pasar el mouse */
-    color: white;
+
+  .navbar-nav .btn {
+    padding: 8px 15px;
+    font-size: 14px;
   }
+
+  .navbar-brand {
+    font-size: 20px;
+  }
+
+  .navbar-toggler {
+    padding: 5px;
+  }
+
+  .header-spacer {
+    height: 100px;
+    /* Ajuste dinámico para pantallas más pequeñas */
+  }
+}
+
+/* Asegura que el contenido comience después del header */
+body,
+.content {
+  margin: 0;
+  padding: 0;
+}

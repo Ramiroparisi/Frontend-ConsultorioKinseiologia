@@ -1,42 +1,28 @@
-section {
+.homepage-section {
   margin-top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f0f0f0;
 }
 
 .container {
-  text-align: center;
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 10px;
   max-width: 540px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 2rem;
+  font-weight: bold;
+  color: #333;
 }
 
-.button{
-  margin: 10px;
-  padding: 10px 20px;
-  background-color: #606C38;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
+p {
+  margin-bottom: 1.5rem;
+  color: #555;
 }
 
-.button:hover {
-  background-color: #283618;
-}
-
-.button:disabled {
-  background-color: #283618;
-  cursor: not-allowed;
+button {
+  padding: 0.5rem 1.25rem;
 }

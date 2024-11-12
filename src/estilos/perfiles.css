@@ -7,6 +7,18 @@
   margin: auto;
   margin-top: 40px;
 }
+
+.perfil-paciente {
+padding-top: 250px;
+}
+
+.perfil-secretaria {
+  padding-top: 250px;
+}
+
+.perfil-kinesiologo {
+  padding-top: 50px;
+}
 .formulario{
   padding-left: 28px;
   padding-top: 20px;
@@ -23,21 +35,12 @@ h2 {
   color: #555555;
 }
 
-.formularioN {
-  border-radius: 4px;
-  box-shadow: none;
-  border: 1px solid #ced4da;
-  width: 458px;
-  padding: 10px;
-}
 
 .formularioC {
   border-radius: 4px;
   box-shadow: none;
   border: 1px solid #ced4da;
 }
-
-
 
 
 button {

@@ -7,6 +7,10 @@ section {
   background-color: #f7f7f7;
 }
 
+.register {
+  padding-top: 80px;
+}
+
 form {
   width: 100%;
   max-width: 600px; /* Ajuste el tamaño del formulario para pantallas más grandes */

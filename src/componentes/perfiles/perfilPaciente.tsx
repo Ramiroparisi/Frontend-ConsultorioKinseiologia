@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../estilos/perfiles.css';
-import { Button } from 'react-bootstrap';
+import { Button, Form, Row, Col, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface Paciente {
@@ -31,7 +31,6 @@ const DatosPaciente: React.FC = () => {
           throw new Error('Error en la respuesta de la API');
         }
         const data = await response.json();
-        console.log('Datos recibidos:', data);
         setPaciente(data.data);
         setEditedData(data.data);
       } catch (error) {
@@ -58,7 +57,7 @@ const DatosPaciente: React.FC = () => {
   };
 
   const handleCancel = () => {
-    setEditedData(paciente); // Resetea a los datos originales
+    setEditedData(paciente);
     setIsEditing(false);
   };
 
@@ -69,10 +68,9 @@ const DatosPaciente: React.FC = () => {
       nombre: editedData?.nombre,
       apellido: editedData?.apellido,
       dni: editedData?.dni,
-      //      fechaNacimiento: editedData?.fechaNacimiento,
       email: editedData?.email,
       telefono: editedData?.telefono,
-      obraSocial: editedData?.obraSocial,
+      direccion: editedData?.obraSocial,
     };
 
     try {
@@ -93,102 +91,100 @@ const DatosPaciente: React.FC = () => {
       setIsEditing(false);
     } catch (error) {
       console.error('Error al guardar los datos del paciente:', error);
-      console.log('Datos a guardar:', dataToUpdate);
     }
   };
 
   return (
-    <div className="datos-kine-container">
+    <body className='perfil-paciente'>
+    <Container className="datos-paciente-container">
       <h2>Mis datos</h2>
       {paciente && (
-        <form className="formulario">
-          <div>
-            <label>Nombre:</label>
-            <input
-              type="text"
-              name="nombre"
-              className="formularioC"
-              value={editedData?.nombre || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>Apellido:</label>
-            <input
-              type="text"
-              name="apellido"
-              className="formularioC"
-              value={editedData?.apellido || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>DNI:</label>
-            <input
-              type="number"
-              name="dni"
-              className="formularioN"
-              value={editedData?.dni || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          {/*       <div>
-          <label>Fecha de nacimiento:</label>
-            <input
-              type="text"
-              name="fechaNacimiento"
-              className="formularioC"
-              value={editedData?.fechaNacimiento instanceof Date ? editedData.fechaNacimiento.toISOString().split('T')[0] : editedData?.fechaNacimiento || ''}
-              disabled
-            />
-          </div> */}
-          <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              className="formularioC"
-              value={editedData?.email || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>Teléfono:</label>
-            <input
-              type="number"
-              name="telefono"
-              className="formularioN"
-              value={editedData?.telefono || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>Obra social:</label>
-            <input
-              type="obraSocial"
-              name="obraSocial"
-              className="formularioC"
-              value={editedData?.obraSocial || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div className="buttons">
+        <Form className="formulario">
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Nombre:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="text"
+                name="nombre"
+                className="formularioC"
+                value={editedData?.nombre || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Apellido:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="text"
+                name="apellido"
+                className="formularioC"
+                value={editedData?.apellido || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">DNI:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="number"
+                name="dni"
+                className="formularioN"
+                value={editedData?.dni || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Email:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="email"
+                name="email"
+                className="formularioC"
+                value={editedData?.email || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Teléfono:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="number"
+                name="telefono"
+                className="formularioN"
+                value={editedData?.telefono || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Obra Social:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="text"
+                name="direccion"
+                className="formularioC"
+                value={editedData?.obraSocial || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <div className="text-right">
             {isEditing ? (
               <>
-                <Button type="button" className="guardar" onClick={handleSave}>
+                <Button type="button" className="guardar me-2" onClick={handleSave}>
                   Guardar
                 </Button>
-                <Button
-                  type="button"
-                  className="cancelar"
-                  onClick={handleCancel}
-                >
+                <Button type="button" className="cancelar" onClick={handleCancel}>
                   Cancelar
                 </Button>
               </>
@@ -198,9 +194,10 @@ const DatosPaciente: React.FC = () => {
               </Button>
             )}
           </div>
-        </form>
+        </Form>
       )}
-    </div>
+    </Container>
+    </body>
   );
 };
 

@@ -71,6 +71,7 @@ const PacienteDashboard: React.FC = () => {
   }, [navigate]);
 
   return (
+    <body className='dash-paciente'>
     <div className="dashboard">
       <div className="container pt-4 pb-4">
         {/* Header */}
@@ -106,9 +107,6 @@ const PacienteDashboard: React.FC = () => {
               </div>
 
               <div className="appointment-actions">
-                <button className="btn btn-link text-primary p-1">
-                  <i className="bi bi-pencil-square"></i>
-                </button>
                 <button className="btn btn-link text-danger p-1">
                   <i className="bi bi-trash"></i>
                 </button>
@@ -155,6 +153,7 @@ const PacienteDashboard: React.FC = () => {
         </div>
       </div>
     </div>
+    </body>
   );
 };
 

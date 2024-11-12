@@ -51,6 +51,7 @@
     display: block;
   }
   
+  
   /* Ajustes para pantallas pequeñas */
   @media (max-width: 768px) {
     .navbar-nav .nav-item .dropdown-menu {
@@ -79,4 +80,3 @@
   .navbar-nav .nav-item .dropdown-menu:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Aumenta la sombra al pasar el mouse */
   }
-  

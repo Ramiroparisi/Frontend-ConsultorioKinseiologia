@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../estilos/perfiles.css';
-import { Button } from 'react-bootstrap';
+import { Button, Form, Row, Col, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface Kinesiologo {
@@ -101,86 +101,95 @@ const DatosKine: React.FC = () => {
   };
 
   return (
-    <div className="datos-kine-container">
+    <body className='perfil-kinesiologo'>
+    <Container className="datos-kine-container">
       <h2>Mis datos</h2>
       {kinesiologo && (
-        <form className="formulario">
-          <div>
-            <label>Nombre:</label>
-            <input
-              type="text"
-              name="nombre"
-              className="formularioC"
-              value={editedData?.nombre || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>Apellido:</label>
-            <input
-              type="text"
-              name="apellido"
-              className="formularioC"
-              value={editedData?.apellido || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>DNI:</label>
-            <input
-              type="number"
-              name="dni"
-              className="formularioN"
-              value={editedData?.dni || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              className="formularioC"
-              value={editedData?.email || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>Teléfono:</label>
-            <input
-              type="number"
-              name="telefono"
-              className="formularioN"
-              value={editedData?.telefono || ''}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-            />
-          </div>
-          <div>
-            <label>Especialidad:</label>
-            <input
-              type="text"
-              name="especialidad"
-              className="formularioC"
-              value={editedData?.especialidad?.nombre || ''}
-              disabled
-            />
-          </div>
-          <div className="buttons">
+        <Form className="formulario">
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Nombre:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="text"
+                name="nombre"
+                className="formularioC"
+                value={editedData?.nombre || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Apellido:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="text"
+                name="apellido"
+                className="formularioC"
+                value={editedData?.apellido || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">DNI:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="number"
+                name="dni"
+                className="formularioN"
+                value={editedData?.dni || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Email:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="email"
+                name="email"
+                className="formularioC"
+                value={editedData?.email || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Teléfono:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="number"
+                name="telefono"
+                className="formularioN"
+                value={editedData?.telefono || ''}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm="3">Especialidad:</Form.Label>
+            <Col sm="9">
+              <Form.Control
+                type="text"
+                name="especialidad"
+                className="formularioC"
+                value={editedData?.especialidad?.nombre || ''}
+                disabled
+              />
+            </Col>
+          </Form.Group>
+          <div className="text-right">
             {isEditing ? (
               <>
-                <Button type="button" className="guardar" onClick={handleSave}>
+                <Button type="button" className="guardar me-2" onClick={handleSave}>
                   Guardar
                 </Button>
-                <Button
-                  type="button"
-                  className="cancelar"
-                  onClick={handleCancel}
-                >
+                <Button type="button" className="cancelar" onClick={handleCancel}>
                   Cancelar
                 </Button>
               </>
@@ -190,9 +199,10 @@ const DatosKine: React.FC = () => {
               </Button>
             )}
           </div>
-        </form>
+        </Form>
       )}
-    </div>
+    </Container>
+    </body>
   );
 };
 

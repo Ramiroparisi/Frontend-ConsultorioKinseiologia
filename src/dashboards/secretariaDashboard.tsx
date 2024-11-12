@@ -267,6 +267,7 @@ function SecretariaDashboard() {
     }, [kinesiologoSeleccionado]);
 
   return (
+    <body className='dash-secretaria'>
     <div className="dashboard">
       <div className="container pt-4 pb-4">
         <h1 className="dashboard-title">Dashboard de Secretaria</h1>
@@ -426,14 +427,6 @@ function SecretariaDashboard() {
                 <span>{especialidad.nombre}</span>
                 <div>
                   <button
-                    className="btn btn-outline-warning btn-sm"
-                    onClick={() =>
-                      navigate(`/modificarEspecialidad/${especialidad.id}`)
-                    }
-                  >
-                    Modificar
-                  </button>
-                  <button
                     className="btn btn-outline-danger btn-sm ml-2"
                     onClick={() => handleRemoveEspecialidad(especialidad.id)}
                   >
@@ -452,6 +445,7 @@ function SecretariaDashboard() {
         </div>
       </div>
     </div>
+    </body>
   );
 }
 

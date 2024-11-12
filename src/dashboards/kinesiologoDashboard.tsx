@@ -111,6 +111,7 @@ const KinesiologoDashboard: React.FC = () => {
   });
 
   return (
+    <body className="dash-kine">
     <div className="dashboard">
       <div className="container pt-4 pb-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
@@ -128,7 +129,7 @@ const KinesiologoDashboard: React.FC = () => {
           <DatePicker
             selected={selectedDate}
             onChange={handleDateChange}
-            placeholderText="Selecciona una fecha"
+            placeholderText="Fecha"
             dateFormat="dd/MM/yyyy"
             className="form-control"
           />
@@ -196,6 +197,7 @@ const KinesiologoDashboard: React.FC = () => {
         </div>
       </div>
     </div>
+    </body>
   );
 };
 
