@@ -126,7 +126,7 @@ const RegistroKinesiologo: React.FC = () => {
   };
 
   return (
-    <body className='register'>
+    < div className='register'>
     <Container
       className="d-flex flex-column justify-content-center align-items-center pt-4"
       style={{ minHeight: '100vh' }}
@@ -297,7 +297,7 @@ const RegistroKinesiologo: React.FC = () => {
         </Row>
       </Form>
     </Container>
-    </body>
+    </div>
   );
 };
 
